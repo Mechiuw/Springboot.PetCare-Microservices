@@ -1,6 +1,7 @@
 package com.mcsoftware.petcare.model.entity;
 
 import com.mcsoftware.petcare.constant.EAnimal;
+import com.mcsoftware.petcare.model.struct.Animal;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class WildAnimal {
+public class WildAnimal extends Animal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,4 +33,7 @@ public class WildAnimal {
 
     @Column(name = "is_alive",nullable = false)
     private Boolean isAlive;
+
+    @OneToOne(mappedBy = "wildAnimalId", cascade = CascadeType.ALL)
+    private VaccinatePoint vaccinatePoint;
 }

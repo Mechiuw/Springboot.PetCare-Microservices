@@ -50,4 +50,9 @@ public class Shelter {
     @JsonManagedReference
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Pet> petInShelter;
+
+    @OneToMany(mappedBy = "shelterId", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<VaccinatePoint> vaccinatePoints;
 }

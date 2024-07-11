@@ -62,4 +62,9 @@ public class ServiceProvider {
     @JsonManagedReference
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Pet> assignedAnimals;
+
+    @OneToMany(mappedBy = "serviceProviderId", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<VaccinatePoint> vaccinatePoints;
 }
