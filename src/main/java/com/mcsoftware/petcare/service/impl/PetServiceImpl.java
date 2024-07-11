@@ -28,6 +28,12 @@ public class PetServiceImpl implements PetService {
     private final BuilderConverter builderConverter;
 
     @Override
+    public Pet petFinder(String id) {
+        return petRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(String.format("not found any pet with id: %s",id)));
+    }
+
+    @Override
     public Shelter shelterFinder(String id) {
         return shelterRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("not found any shelter with id: %s",id)));
