@@ -13,10 +13,11 @@ import com.mcsoftware.petcare.service.interfaces.PetService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -92,21 +93,39 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetResponse update(String id, PetRequest petRequest) {
-        Pet foundPet = petFinder(id);
-        PetRequest validatedRequest = petValidator(petRequest);
+        try {
+            Pet foundPet = petFinder(id);
+            PetRequest validatedRequest = petValidator(petRequest);
 
-        foundPet.setName(validatedRequest.getName());
-        foundPet.setAnimalType(validatedRequest.getAnimalType());
-        foundPet.setBreed(validatedRequest.getBreed());
-        foundPet.setAge(validatedRequest.getAge());
-        foundPet.setMedicalConditions(validatedRequest.getMedicalConditions());
+            foundPet.setName(validatedRequest.getName());
+            foundPet.setAnimalType(validatedRequest.getAnimalType());
+            foundPet.setBreed(validatedRequest.getBreed());
+            foundPet.setAge(validatedRequest.getAge());
+            foundPet.setMedicalConditions(validatedRequest.getMedicalConditions());
 
-        return null;
+            Pet newPet = petRepository.saveAndFlush(foundPet);
+            return builderConverter.petResponseBuilderConvert(newPet, validatedRequest);
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(String.format("Entity not found: %s",e.getMessage()));
+        } catch (ValidationException e){
+            throw new RuntimeException(String.format("Validation exception caught: %s",e.getMessage()));
+        } catch (Exception e){
+            throw new RuntimeException(String.format("Failed to execute: %s",e.getMessage()));
+        }
     }
 
     @Override
-    public PetResponse delete(String id) {
-        return null;
+    public void delete(String id) {
+        try {
+
+            petRepository.delete(petFinder(id));
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(String.format("Entity not found: %s",e.getMessage()));
+        } catch (ValidationException e){
+            throw new RuntimeException(String.format("Validation exception caught: %s",e.getMessage()));
+        } catch (Exception e){
+            throw new RuntimeException(String.format("Failed to execute: %s",e.getMessage()));
+        }
     }
 
     @Override
@@ -115,7 +134,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public PetResponse getAll() {
+    public List<Pet> getAll() {
         return null;
     }
 }

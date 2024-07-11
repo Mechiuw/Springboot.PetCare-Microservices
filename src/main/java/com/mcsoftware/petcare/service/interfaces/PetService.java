@@ -7,12 +7,14 @@ import com.mcsoftware.petcare.model.entity.ServiceProvider;
 import com.mcsoftware.petcare.model.entity.Shelter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 public interface PetService {
     PetResponse create(PetRequest petRequest);
     PetResponse update(String id,PetRequest petRequest);
-    PetResponse delete(String id);
+    void delete(String id);
     PetResponse getById(String id);
-    PetResponse getAll();
+    List<Pet> getAll();
 
     //FINDERS
     Shelter shelterFinder(String id);
