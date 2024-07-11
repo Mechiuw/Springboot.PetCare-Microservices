@@ -20,6 +20,7 @@ public interface PetService {
     List<Pet> getAll();
 
     PetResponse petBoarding(WildAnimal wildAnimal,String name,String age,String shelterAdoptId,String serviceProviderId);
+    PetResponse getPetMedicalConditions(String id);
 
     //FINDERS
     Shelter shelterFinder(String id);

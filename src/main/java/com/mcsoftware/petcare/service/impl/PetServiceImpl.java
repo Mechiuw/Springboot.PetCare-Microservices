@@ -155,12 +155,37 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetResponse petBoarding(WildAnimal wildAnimal,String name,String age,String shelterAdoptId,String serviceProviderId) {
-        Date firstVaccineDate = wildAnimal.getVaccinatePointId().getFirstVaccineDate();
-        if (wildAnimal.getVaccinatePointId().getSecondVaccineDate().after(firstVaccineDate)) {
-            PetRequest convertedAnimal = builderConverter.animalToPetConverter(wildAnimal,name,age,shelterAdoptId,serviceProviderId);
-            return create(convertedAnimal);
-        } else {
-            throw new IllegalArgumentException("failed to board caused due animal still need second vaccination");
+        try {
+            Date firstVaccineDate = wildAnimal.getVaccinatePointId().getFirstVaccineDate();
+            if (wildAnimal.getVaccinatePointId().getSecondVaccineDate().after(firstVaccineDate)) {
+                PetRequest convertedAnimal = builderConverter.animalToPetConverter(wildAnimal, name, age, shelterAdoptId, serviceProviderId);
+                return create(convertedAnimal);
+            } else {
+                throw new IllegalArgumentException("failed to board caused due animal still need second vaccination");
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
         }
     }
+
+    @Override
+    public PetResponse getPetMedicalConditions(String id) {
+        try{
+            Pet foundPet = petFinder(id);
+            if (foundPet != null){
+                return PetResponse.builder()
+                        .id(foundPet.getId())
+                        .name(foundPet.getName())
+                        .breed(foundPet.getBreed())
+                        .medicalConditions(foundPet.getMedicalConditions())
+                        .build();
+            } else {
+                throw new IllegalArgumentException(String.format("not found any pet with such id: %s",id));
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+
 }
