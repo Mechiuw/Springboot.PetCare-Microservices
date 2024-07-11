@@ -1,12 +1,19 @@
 package com.mcsoftware.petcare.service.impl;
 
+import com.mcsoftware.petcare.model.converter.BuilderConverter;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
 import com.mcsoftware.petcare.model.entity.Pet;
+import com.mcsoftware.petcare.model.entity.ServiceProvider;
 import com.mcsoftware.petcare.model.entity.Shelter;
 import com.mcsoftware.petcare.repository.PetRepository;
+import com.mcsoftware.petcare.repository.ServiceProviderRepository;
 import com.mcsoftware.petcare.repository.ShelterRepository;
 import com.mcsoftware.petcare.service.interfaces.PetService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +24,19 @@ import java.util.NoSuchElementException;
 public class PetServiceImpl implements PetService {
     private final PetRepository petRepository;
     private final ShelterRepository shelterRepository;
+    private final ServiceProviderRepository serviceProviderRepository;
+    private final BuilderConverter builderConverter;
 
     @Override
     public Shelter shelterFinder(String id) {
         return shelterRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format("not found any shelter with id: %s",id)));
+    }
+
+    @Override
+    public ServiceProvider serviceProviderFinder(String id) {
+        return serviceProviderRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(String.format("not found any service provider with id: %s",id)));
     }
 
     @Override
@@ -48,21 +63,33 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public PetResponse create(PetRequest petRequest) {
-        Shelter shelter = shelterFinder(petRequest.getShelterAdoptId());
-        PetRequest validatedRequest = petValidator(petRequest);
+        try {
+            Shelter shelter = shelterFinder(petRequest.getShelterAdoptId());
+            PetRequest validatedRequest = petValidator(petRequest);
+            ServiceProvider serviceProvider = serviceProviderFinder(petRequest.getServiceProviderId());
+            Pet pet = builderConverter.PetBuilderConvert(validatedRequest,shelter,serviceProvider);
 
-        Pet pet = Pet.builder()
-                .name(validatedRequest.getName())
-                .animalType(validatedRequest.getAnimalType())
-                .breed(validatedRequest.getBreed())
-                .age(validatedRequest.getAge())
-                .medicalConditions(validatedRequest.getMedicalConditions())
-                .shelterAdoptId(shelter)
-
-
-                .build();
-        return null;
+            assert pet != null : "pet forbidden to be null";
+            Pet newPet = petRepository.save(pet);
+            return PetResponse.builder()
+                    .name(newPet.getName())
+                    .animalType(newPet.getAnimalType())
+                    .breed(newPet.getBreed())
+                    .age(newPet.getAge())
+                    .medicalConditions(newPet.getMedicalConditions())
+                    .shelterAdoptId(validatedRequest.getShelterAdoptId())
+                    .serviceProviderId(validatedRequest.getServiceProviderId())
+                    .clientAdoptId(validatedRequest.getClientAdoptId())
+                    .build();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
