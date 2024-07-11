@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ShelterRequest {
-    private String id;
     private String name;
     private String address;
     private String email;

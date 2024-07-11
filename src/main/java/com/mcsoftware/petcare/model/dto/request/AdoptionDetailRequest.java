@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class AdoptionDetailRequest {
-    private String id;
     private String petId;
     private String message;
     private String adoptionId;

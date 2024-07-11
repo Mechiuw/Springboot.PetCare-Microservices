@@ -16,7 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class ServiceProviderRequest {
-    private String id;
     private String profileIdNumber;
     private String firstName;
     private String lastName;

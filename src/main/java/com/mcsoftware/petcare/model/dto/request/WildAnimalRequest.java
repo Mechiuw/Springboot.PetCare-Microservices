@@ -7,7 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class WildAnimalRequest {
-    private String id;
     private String breed;
     private EAnimal animalType;
     private String medicalConditions;

@@ -1,4 +1,4 @@
-package com.mcsoftware.petcare.model.dto.request;
+package com.mcsoftware.petcare.model.dto.response;
 
 import com.mcsoftware.petcare.constant.EAnimal;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class PetRequest {
+public class PetResponse {
+    private String id;
     private String name;
     private EAnimal animalType;
     private String breed;
