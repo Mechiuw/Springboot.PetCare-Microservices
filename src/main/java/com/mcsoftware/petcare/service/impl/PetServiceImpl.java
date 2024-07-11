@@ -74,7 +74,7 @@ public class PetServiceImpl implements PetService {
         try {
             Shelter shelter = shelterFinder(petRequest.getShelterAdoptId());
             PetRequest validatedRequest = petValidator(petRequest);
-            ServiceProvider serviceProvider = serviceProviderFinder(petRequest.getServiceProviderId());
+            ServiceProvider serviceProvider = serviceProviderFinder(validatedRequest.getServiceProviderId());
             Pet pet = builderConverter.petBuilderConvert(validatedRequest,shelter,serviceProvider);
 
             assert pet != null : "pet forbidden to be null";
@@ -92,6 +92,15 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetResponse update(String id, PetRequest petRequest) {
+        Pet foundPet = petFinder(id);
+        PetRequest validatedRequest = petValidator(petRequest);
+
+        foundPet.setName(validatedRequest.getName());
+        foundPet.setAnimalType(validatedRequest.getAnimalType());
+        foundPet.setBreed(validatedRequest.getBreed());
+        foundPet.setAge(validatedRequest.getAge());
+        foundPet.setMedicalConditions(validatedRequest.getMedicalConditions());
+
         return null;
     }
 
