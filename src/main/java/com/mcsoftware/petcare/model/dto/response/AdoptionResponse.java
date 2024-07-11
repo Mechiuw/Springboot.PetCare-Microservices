@@ -1,15 +1,18 @@
-package com.mcsoftware.petcare.model.dto.request;
+package com.mcsoftware.petcare.model.dto.response;
 
 import com.mcsoftware.petcare.model.entity.AdoptionDetail;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdoptionRequest {
+@Builder(toBuilder = true)
+public class AdoptionResponse {
     private String id;
     private String clientId;
     private String shelterId;
