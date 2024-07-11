@@ -17,6 +17,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -153,13 +154,13 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public PetResponse petBoarding(WildAnimal wildAnimal) {
-        if(wildAnimal.getVaccinatePointId() != null){
-
+    public PetResponse petBoarding(WildAnimal wildAnimal,String name,String age,String shelterAdoptId,String serviceProviderId) {
+        Date firstVaccineDate = wildAnimal.getVaccinatePointId().getFirstVaccineDate();
+        if (wildAnimal.getVaccinatePointId().getSecondVaccineDate().after(firstVaccineDate)) {
+            PetRequest convertedAnimal = builderConverter.animalToPetConverter(wildAnimal,name,age,shelterAdoptId,serviceProviderId);
+            return create(convertedAnimal);
         } else {
-            throw new IllegalArgumentException("failed to board caused due wild animal still not vaccinated");
+            throw new IllegalArgumentException("failed to board caused due animal still need second vaccination");
         }
-
-        return null;
     }
 }

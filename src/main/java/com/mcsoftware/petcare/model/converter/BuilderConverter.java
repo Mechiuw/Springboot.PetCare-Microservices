@@ -5,6 +5,7 @@ import com.mcsoftware.petcare.model.dto.response.PetResponse;
 import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.model.entity.ServiceProvider;
 import com.mcsoftware.petcare.model.entity.Shelter;
+import com.mcsoftware.petcare.model.entity.WildAnimal;
 
 public class BuilderConverter {
 
@@ -52,6 +53,22 @@ public class BuilderConverter {
                     .shelterAdoptId(pet.getShelterAdoptId().getId())
                     .serviceProviderId(pet.getServiceProviderId().getId())
                     .clientAdoptId(pet.getClientAdoptId().getId())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public PetRequest animalToPetConverter(WildAnimal wildAnimal,String name,String age,String shelterAdoptId,String serviceProviderId){
+        try{
+            return PetRequest.builder()
+                    .name(name)
+                    .animalType(wildAnimal.getAnimalType())
+                    .breed(wildAnimal.getBreed())
+                    .age(age)
+                    .medicalConditions(wildAnimal.getMedicalConditions())
+                    .shelterAdoptId(shelterAdoptId)
+                    .serviceProviderId(serviceProviderId)
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());

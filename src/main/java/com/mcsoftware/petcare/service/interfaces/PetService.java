@@ -19,7 +19,7 @@ public interface PetService {
     PetResponse getById(String id);
     List<Pet> getAll();
 
-    PetResponse petBoarding(WildAnimal wildAnimal);
+    PetResponse petBoarding(WildAnimal wildAnimal,String name,String age,String shelterAdoptId,String serviceProviderId);
 
     //FINDERS
     Shelter shelterFinder(String id);
