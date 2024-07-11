@@ -6,6 +6,7 @@ import com.mcsoftware.petcare.model.dto.response.PetResponse;
 import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.model.entity.ServiceProvider;
 import com.mcsoftware.petcare.model.entity.Shelter;
+import com.mcsoftware.petcare.model.entity.WildAnimal;
 import com.mcsoftware.petcare.repository.PetRepository;
 import com.mcsoftware.petcare.repository.ServiceProviderRepository;
 import com.mcsoftware.petcare.repository.ShelterRepository;
@@ -14,9 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -151,5 +150,16 @@ public class PetServiceImpl implements PetService {
         } catch (Exception e){
             throw new RuntimeException(String.format("Failed to execute: %s",e.getMessage()));
         }
+    }
+
+    @Override
+    public PetResponse petBoarding(WildAnimal wildAnimal) {
+        if(wildAnimal.getVaccinatePointId() != null){
+
+        } else {
+            throw new IllegalArgumentException("failed to board caused due wild animal still not vaccinated");
+        }
+
+        return null;
     }
 }
