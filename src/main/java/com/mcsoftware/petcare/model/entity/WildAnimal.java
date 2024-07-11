@@ -35,5 +35,5 @@ public class WildAnimal extends Animal {
     private Boolean isAlive;
 
     @OneToOne(mappedBy = "wildAnimalId", cascade = CascadeType.ALL)
-    private VaccinatePoint vaccinatePoint;
+    private VaccinatePoint vaccinatePointId;
 }
