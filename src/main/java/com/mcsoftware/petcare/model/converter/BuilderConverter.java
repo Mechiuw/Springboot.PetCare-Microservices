@@ -26,6 +26,7 @@ public class BuilderConverter {
     public PetResponse petResponseBuilderConvert(Pet newPet,PetRequest validatedRequest){
         try{
             return PetResponse.builder()
+                    .id(newPet.getId())
                     .name(newPet.getName())
                     .animalType(newPet.getAnimalType())
                     .breed(newPet.getBreed())
@@ -34,6 +35,23 @@ public class BuilderConverter {
                     .shelterAdoptId(validatedRequest.getShelterAdoptId())
                     .serviceProviderId(validatedRequest.getServiceProviderId())
                     .clientAdoptId(validatedRequest.getClientAdoptId())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public PetResponse petResponseBuilder(Pet pet){
+        try{
+            return PetResponse.builder()
+                    .id(pet.getId())
+                    .name(pet.getName())
+                    .animalType(pet.getAnimalType())
+                    .breed(pet.getBreed())
+                    .medicalConditions(pet.getMedicalConditions())
+                    .shelterAdoptId(pet.getShelterAdoptId().getId())
+                    .serviceProviderId(pet.getServiceProviderId().getId())
+                    .clientAdoptId(pet.getClientAdoptId().getId())
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());

@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
@@ -117,12 +118,9 @@ public class PetServiceImpl implements PetService {
     @Override
     public void delete(String id) {
         try {
-
             petRepository.delete(petFinder(id));
         } catch (EntityNotFoundException e){
             throw new RuntimeException(String.format("Entity not found: %s",e.getMessage()));
-        } catch (ValidationException e){
-            throw new RuntimeException(String.format("Validation exception caught: %s",e.getMessage()));
         } catch (Exception e){
             throw new RuntimeException(String.format("Failed to execute: %s",e.getMessage()));
         }
@@ -130,7 +128,14 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetResponse getById(String id) {
-        return null;
+        try {
+            Pet findPet = petFinder(id);
+            return builderConverter.petResponseBuilder(findPet);
+        } catch (EntityNotFoundException e){
+                throw new RuntimeException(String.format("Entity not found: %s",e.getMessage()));
+        } catch (Exception e){
+            throw new RuntimeException(String.format("Failed to execute: %s",e.getMessage()));
+        }
     }
 
     @Override
