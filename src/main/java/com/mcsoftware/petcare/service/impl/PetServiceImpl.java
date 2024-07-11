@@ -69,20 +69,12 @@ public class PetServiceImpl implements PetService {
             Shelter shelter = shelterFinder(petRequest.getShelterAdoptId());
             PetRequest validatedRequest = petValidator(petRequest);
             ServiceProvider serviceProvider = serviceProviderFinder(petRequest.getServiceProviderId());
-            Pet pet = builderConverter.PetBuilderConvert(validatedRequest,shelter,serviceProvider);
+            Pet pet = builderConverter.petBuilderConvert(validatedRequest,shelter,serviceProvider);
 
             assert pet != null : "pet forbidden to be null";
             Pet newPet = petRepository.save(pet);
-            return PetResponse.builder()
-                    .name(newPet.getName())
-                    .animalType(newPet.getAnimalType())
-                    .breed(newPet.getBreed())
-                    .age(newPet.getAge())
-                    .medicalConditions(newPet.getMedicalConditions())
-                    .shelterAdoptId(validatedRequest.getShelterAdoptId())
-                    .serviceProviderId(validatedRequest.getServiceProviderId())
-                    .clientAdoptId(validatedRequest.getClientAdoptId())
-                    .build();
+            return builderConverter.petResponseBuilderConvert(newPet,validatedRequest);
+
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         } catch (ValidationException e) {
