@@ -1,6 +1,5 @@
 package com.mcsoftware.petcare.model.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mcsoftware.petcare.constant.EStatus;
@@ -10,42 +9,45 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Builder(toBuilder = true)
+@Table(name = "m_shelter")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "m_client")
-public class Client {
+@Builder(toBuilder = true)
+public class Shelter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue
     private String id;
 
-    @Column(name = "first_name",nullable = false)
-    private String firstName;
-
-    @Column(name = "last_name",nullable = false)
-    private String lastName;
-
-    @Column(name = "profileIdNumber",nullable = false)
-    private String profileIdNumber;
-
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "name",nullable = false)
+    private String name;
 
     @Column(name = "address",nullable = false)
     private String address;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "postal_code",nullable = false)
+    private String postalCode;
+
+    @Column(name = "country", nullable = false)
+    private String country;
+
     @Column(name = "phone_number",nullable = false)
     private String phoneNumber;
 
-    @Column(name = "status",nullable = false)
+    @Column(name = "is_active",nullable = false)
     @Enumerated(EnumType.STRING)
-    private EStatus status;
+    private EStatus isActive;
 
-    @OneToMany(mappedBy = "clientAdoptId",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "shelterAdoptId",cascade = CascadeType.ALL)
     @JsonManagedReference
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<Pet> listAdopting;
+    private List<Pet> petInShelter;
 }
