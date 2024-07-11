@@ -132,7 +132,7 @@ public class PetServiceImpl implements PetService {
             Pet findPet = petFinder(id);
             return builderConverter.petResponseBuilder(findPet);
         } catch (EntityNotFoundException e){
-                throw new RuntimeException(String.format("Entity not found: %s",e.getMessage()));
+            throw new RuntimeException(String.format("Entity not found: %s",e.getMessage()));
         } catch (Exception e){
             throw new RuntimeException(String.format("Failed to execute: %s",e.getMessage()));
         }
@@ -140,6 +140,16 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public List<Pet> getAll() {
-        return null;
+        try {
+            List<Pet> pets = petRepository.findAll();
+            if (pets.isEmpty()){
+                throw new RuntimeException("Pet list is empty");
+            }
+            return pets;
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(String.format("Entity not found: %s",e.getMessage()));
+        } catch (Exception e){
+            throw new RuntimeException(String.format("Failed to execute: %s",e.getMessage()));
+        }
     }
 }
