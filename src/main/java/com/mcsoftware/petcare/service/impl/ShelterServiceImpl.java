@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class ShelterServiceImpl extends ShelterService {
+public class ShelterServiceImpl implements ShelterService {
     private ShelterRepository shelterRepository;
     private BuilderConverter builderConverter;
+
 
     @Override
     public Shelter shelterFinder(String id) {
@@ -80,7 +80,8 @@ public class ShelterServiceImpl extends ShelterService {
         try{
             Shelter newShelter =  builderConverter.shelterBuilder(shelterRequest);
             Shelter validatedShelter = shelterValidator(newShelter);
-            return builderConverter.shelterResponseBuilderConvert(validatedShelter);
+            Shelter savedShelter = shelterRepository.save(validatedShelter);
+            return builderConverter.shelterResponseBuilderConvert(savedShelter);
         } catch (EntityNotFoundException e){
             throw new RuntimeException("Entity not found: " + e.getMessage());
         } catch (ValidationException e) {
