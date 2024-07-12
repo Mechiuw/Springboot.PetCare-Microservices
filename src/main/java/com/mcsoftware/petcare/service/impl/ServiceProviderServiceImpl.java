@@ -3,7 +3,9 @@ package com.mcsoftware.petcare.service.impl;
 import com.mcsoftware.petcare.model.converter.BuilderConverter;
 import com.mcsoftware.petcare.model.dto.request.ServiceProviderRequest;
 import com.mcsoftware.petcare.model.dto.response.ServiceProviderResponse;
+import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.model.entity.ServiceProvider;
+import com.mcsoftware.petcare.model.entity.VaccinatePoint;
 import com.mcsoftware.petcare.repository.ServiceProviderRepository;
 import com.mcsoftware.petcare.service.interfaces.ServiceProviderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -117,18 +119,54 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     }
 
     @Override
-    public List<ServiceProvider> getAllAssignedAnimals(String id) {
-        return null;
+    public List<Pet> getAllAssignedAnimals(String id) {
+        try {
+            ServiceProvider foundSp = spFinder(id);
+            if(foundSp == null) {
+                return Collections.emptyList();
+            }
+            return foundSp.getAssignedAnimals();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
-    public List<ServiceProvider> getAllVaccinatePoints(String id) {
-        return null;
+    public List<VaccinatePoint> getAllVaccinatePoints(String id) {
+        try {
+            ServiceProvider foundSp = spFinder(id);
+            if(foundSp == null) {
+                return Collections.emptyList();
+            }
+            return foundSp.getVaccinatePoints();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
     public ServiceProviderResponse eVaxDose(String id) {
-        return null;
+        try {
+            ServiceProvider serviceProvider = spFinder(id);
+            if (serviceProvider == null || serviceProvider.getVaccinatePoints() == null) {
+                throw new RuntimeException(String.format("Entity not found: %s", id));
+            }
+            return builderConverter.serviceProviderResponseEVax(serviceProvider);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override

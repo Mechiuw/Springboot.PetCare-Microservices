@@ -181,4 +181,19 @@ public class BuilderConverter {
             throw new RuntimeException(e.getCause());
         }
     }
+
+    public ServiceProviderResponse serviceProviderResponseEVax(ServiceProvider serviceProvider){
+        try{
+            return ServiceProviderResponse.builder()
+                    .profileIdNumber(serviceProvider.getProfileIdNumber())
+                    .firstName(serviceProvider.getFirstName())
+                    .lastName(serviceProvider.getLastName())
+                    .isVaccinate(serviceProvider.getIsVaccinate())
+                    .joinedDate(serviceProvider.getJoinedDate())
+                    .status(serviceProvider.getStatus())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
 }
