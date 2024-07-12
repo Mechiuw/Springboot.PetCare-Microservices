@@ -23,8 +23,9 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     public ServiceProviderResponse create(ServiceProviderRequest serviceProviderRequest) {
         try {
             ServiceProvider newServiceProvider = builderConverter.serviceProviderBuilderConvert(serviceProviderRequest);
-
-            return null;
+            ServiceProvider validatedSp = spValidator(newServiceProvider);
+            ServiceProvider savedSp = serviceProviderRepository.save(validatedSp);
+            return builderConverter.serviceProviderResponseBuilderConvert(savedSp);
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         } catch (ValidationException e) {

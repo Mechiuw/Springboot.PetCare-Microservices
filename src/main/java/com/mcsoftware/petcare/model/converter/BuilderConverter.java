@@ -6,6 +6,7 @@ import com.mcsoftware.petcare.model.dto.request.ServiceProviderRequest;
 import com.mcsoftware.petcare.model.dto.request.ShelterRequest;
 import com.mcsoftware.petcare.model.dto.response.ClientResponse;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
+import com.mcsoftware.petcare.model.dto.response.ServiceProviderResponse;
 import com.mcsoftware.petcare.model.dto.response.ShelterResponse;
 import com.mcsoftware.petcare.model.entity.*;
 
@@ -156,6 +157,25 @@ public class BuilderConverter {
                     .isVaccinate(serviceProviderRequest.getIsVaccinate())
                     .joinedDate(serviceProviderRequest.getJoinedDate())
                     .status(serviceProviderRequest.getStatus())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public ServiceProviderResponse serviceProviderResponseBuilderConvert(ServiceProvider serviceProvider){
+        try{
+            return ServiceProviderResponse.builder()
+                    .profileIdNumber(serviceProvider.getProfileIdNumber())
+                    .firstName(serviceProvider.getFirstName())
+                    .lastName(serviceProvider.getLastName())
+                    .email(serviceProvider.getEmail())
+                    .address(serviceProvider.getAddress())
+                    .type(serviceProvider.getType())
+                    .salary(serviceProvider.getSalary())
+                    .isVaccinate(serviceProvider.getIsVaccinate())
+                    .joinedDate(serviceProvider.getJoinedDate())
+                    .status(serviceProvider.getStatus())
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());
