@@ -7,11 +7,12 @@ import com.mcsoftware.petcare.repository.ServiceProviderRepository;
 import com.mcsoftware.petcare.repository.ShelterRepository;
 import com.mcsoftware.petcare.repository.WildAnimalRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
+@Component
 public class BuilderConverter {
     private final ServiceProviderRepository serviceProviderRepository;
     private final WildAnimalRepository wildAnimalRepository;

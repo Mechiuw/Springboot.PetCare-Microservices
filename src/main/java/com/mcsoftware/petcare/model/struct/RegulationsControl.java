@@ -6,11 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Setter
 @Getter
-public abstract class Control {
+public abstract class RegulationsControl {
     public String animalControl(String animal,String staff,String confirmation){
         if (confirmation.isEmpty() || staff.isEmpty()){
             throw new IllegalArgumentException(String.format("can't process an animal without confirmation and staff present: %s",staff));

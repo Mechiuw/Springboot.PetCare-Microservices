@@ -3,7 +3,6 @@ package com.mcsoftware.petcare.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mcsoftware.petcare.model.struct.Control;
 import jakarta.persistence.*;
 import lombok.*;
 

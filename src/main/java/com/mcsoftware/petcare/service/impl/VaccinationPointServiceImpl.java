@@ -34,7 +34,7 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
         try {
             VaccinatePoint vaccinatePoint = builderConverter.vaccinatePointBuilderConvert(vaccinatePointRequest);
             VaccinatePoint validatedVaccinatePoint = vpValidator(vaccinatePoint);
-            VaccinatePoint savedVp = vaccinationPointRepository.save(validatedVaccinatePoint);
+            VaccinatePoint savedVp = vaccinationPointRepository.saveAndFlush(validatedVaccinatePoint);
             return builderConverter.vaccinatePointResponseBuilderConvert(savedVp);
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
