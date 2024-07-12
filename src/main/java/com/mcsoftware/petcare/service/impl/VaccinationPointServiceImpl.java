@@ -14,8 +14,11 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -97,7 +100,12 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
     @Override
     public List<VaccinatePoint> getAll() {
         try {
-            return null;
+            List<VaccinatePoint> vps = vaccinationPointRepository.findAll();
+            if (!vps.isEmpty()){
+                return vps.stream().toList();
+            } else {
+                return Collections.emptyList();
+            }
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         } catch (ValidationException e) {
@@ -153,7 +161,17 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
     @Override
     public RegulationsResponse regulations(String id) {
         try {
-            return null;
+            Optional<VaccinatePoint> vaccinatePoint = vaccinationPointRepository.findById(id);
+            if(vaccinatePoint.isPresent()) {
+                return RegulationsResponse.builder()
+                        .regulations(vaccinatePoint.get().animalControl(
+                                vaccinatePoint.get().getWildAnimalId().getBreed(),
+                                vaccinatePoint.get().getServiceProviderId().getFirstName(),
+                                "CONFIRMED"))
+                        .build();
+            } else {
+                throw new NoSuchElementException("vaccinate point is not present");
+            }
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         } catch (ValidationException e) {
