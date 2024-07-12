@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,22 @@ public class WildAnimalServiceImpl implements WildAnimalService {
 
     @Override
     public WildAnimalResponse update(String id, WildAnimalRequest wildAnimalRequest) {
-        return null;
+        try {
+            WildAnimal foundAnimal = wildAnimalFinder(id);
+            foundAnimal.setBreed(wildAnimalRequest.getBreed());
+            foundAnimal.setAnimalType(wildAnimalRequest.getAnimalType());
+            foundAnimal.setMedicalConditions(wildAnimalRequest.getMedicalConditions());
+            foundAnimal.setLocationFound(wildAnimalRequest.getLocationFound());
+            foundAnimal.setIsAlive(wildAnimalRequest.getIsAlive());
+            WildAnimal savedAnimal = wildAnimalRepository.saveAndFlush(foundAnimal);
+            return builderConverter.wildAnimalResponseBuilderConvert(savedAnimal);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
@@ -62,8 +78,13 @@ public class WildAnimalServiceImpl implements WildAnimalService {
     }
 
     @Override
-    public WildAnimal wildAnimalFinder() {
-        return null;
+    public WildAnimal wildAnimalFinder(String id) {
+        try {
+            return wildAnimalRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("not found any wild animal with id: " + id));
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     @Override
