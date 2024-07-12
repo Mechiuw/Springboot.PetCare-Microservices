@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class VaccinatePointResponse {
+    private String id;
     private Date firstVaccinateDate;
     private Date secondVaccinateDate;
     private String wildAnimalId;

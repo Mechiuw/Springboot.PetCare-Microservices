@@ -16,7 +16,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 @Getter
 @Setter
-public class Adoption extends Control {
+public class Adoption {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

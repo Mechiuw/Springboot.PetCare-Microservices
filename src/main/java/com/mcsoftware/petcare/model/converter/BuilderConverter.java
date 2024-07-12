@@ -3,10 +3,19 @@ package com.mcsoftware.petcare.model.converter;
 import com.mcsoftware.petcare.model.dto.request.*;
 import com.mcsoftware.petcare.model.dto.response.*;
 import com.mcsoftware.petcare.model.entity.*;
+import com.mcsoftware.petcare.repository.ServiceProviderRepository;
+import com.mcsoftware.petcare.repository.ShelterRepository;
+import com.mcsoftware.petcare.repository.WildAnimalRepository;
+import lombok.RequiredArgsConstructor;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
+@RequiredArgsConstructor
 public class BuilderConverter {
+    private final ServiceProviderRepository serviceProviderRepository;
+    private final WildAnimalRepository wildAnimalRepository;
+    private final ShelterRepository shelterRepository;
 
     public Pet petBuilderConvert(PetRequest validatedRequest, Shelter shelter, ServiceProvider serviceProvider){
         try {
@@ -226,6 +235,38 @@ public class BuilderConverter {
                     .locationFound(wildAnimal.getLocationFound())
                     .isAlive(wildAnimal.getIsAlive())
                     .vaccinatePointId(wildAnimal.getVaccinatePointId().getId())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public VaccinatePoint vaccinatePointBuilderConvert(VaccinatePointRequest vaccinatePointRequest){
+        try{
+            return VaccinatePoint.builder()
+                    .firstVaccineDate(vaccinatePointRequest.getFirstVaccinateDate())
+                    .secondVaccineDate(vaccinatePointRequest.getSecondVaccinateDate())
+                    .wildAnimalId(wildAnimalRepository.findById(vaccinatePointRequest.getWildAnimalId())
+                            .orElseThrow(() -> new NoSuchElementException("not found any wild animal")))
+                    .serviceProviderId(serviceProviderRepository.findById(vaccinatePointRequest.getServiceProviderId())
+                            .orElseThrow(() -> new NoSuchElementException("not found any service provider")))
+                    .shelterId(shelterRepository.findById(vaccinatePointRequest.getShelterId())
+                            .orElseThrow(() -> new NoSuchElementException("not found any shelter")))
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public VaccinatePointResponse vaccinatePointResponseBuilderConvert(VaccinatePoint vaccinatePoint){
+        try{
+            return VaccinatePointResponse.builder()
+                    .id(vaccinatePoint.getId())
+                    .firstVaccinateDate(vaccinatePoint.getFirstVaccineDate())
+                    .secondVaccinateDate(vaccinatePoint.getSecondVaccineDate())
+                    .wildAnimalId(vaccinatePoint.getWildAnimalId().getId())
+                    .serviceProviderId(vaccinatePoint.getServiceProviderId().getId())
+                    .shelterId(vaccinatePoint.getShelterId().getId())
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());

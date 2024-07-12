@@ -1,6 +1,7 @@
 package com.mcsoftware.petcare.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mcsoftware.petcare.model.struct.Control;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.util.Date;
 @Builder(toBuilder = true)
 @Getter
 @Setter
-public class VaccinatePoint {
+public class VaccinatePoint extends Control {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

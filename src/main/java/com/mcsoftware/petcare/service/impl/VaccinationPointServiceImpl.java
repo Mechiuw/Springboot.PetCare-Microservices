@@ -1,0 +1,144 @@
+package com.mcsoftware.petcare.service.impl;
+import com.mcsoftware.petcare.model.converter.BuilderConverter;
+import com.mcsoftware.petcare.model.dto.request.VaccinatePointRequest;
+import com.mcsoftware.petcare.model.dto.response.RegulationsResponse;
+import com.mcsoftware.petcare.model.dto.response.VaccinatePointResponse;
+import com.mcsoftware.petcare.model.entity.VaccinatePoint;
+import com.mcsoftware.petcare.repository.VaccinationPointRepository;
+import com.mcsoftware.petcare.service.interfaces.VaccinationPointService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(rollbackOn = Exception.class)
+public class VaccinationPointServiceImpl implements VaccinationPointService {
+    private final VaccinationPointRepository vaccinationPointRepository;
+    private final BuilderConverter builderConverter;
+
+    @Override
+    public VaccinatePointResponse create(VaccinatePointRequest vaccinatePointRequest) {
+        try {
+            VaccinatePoint vaccinatePoint = builderConverter.vaccinatePointBuilderConvert(vaccinatePointRequest);
+            VaccinatePoint validatedVaccinatePoint = vpValidator(vaccinatePoint);
+            VaccinatePoint savedVp = vaccinationPointRepository.save(validatedVaccinatePoint);
+            return builderConverter.vaccinatePointResponseBuilderConvert(savedVp);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public VaccinatePointResponse update(String id, VaccinatePointRequest vaccinatePointRequest) {
+        try {
+            return null;
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public void delete(String id) {
+        try {
+
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public VaccinatePointResponse getById(String id) {
+        try {
+            return null;
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public List<VaccinatePoint> getAll() {
+        try {
+            return null;
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public VaccinatePointResponse vpFinder(String id) {
+        try {
+            return null;
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        }  catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public VaccinatePoint vpValidator(VaccinatePoint vaccinatePoint) {
+        try {
+            if (vaccinatePoint != null) {
+                if (vaccinatePoint.getFirstVaccineDate() == null) {
+                    throw new ValidationException("First vaccine date can't be null");
+                }
+                if (vaccinatePoint.getSecondVaccineDate() == null) {
+                    throw new ValidationException("Second vaccine date can't be null");
+                }
+                if (vaccinatePoint.getWildAnimalId() == null) {
+                    throw new ValidationException("Wild animal ID can't be null");
+                }
+                if (vaccinatePoint.getShelterId() == null) {
+                    throw new ValidationException("Shelter ID can't be null");
+                }
+                if (vaccinatePoint.getServiceProviderId() == null) {
+                    throw new ValidationException("Service provider ID can't be null");
+                }
+            } else {
+                throw new ValidationException("Validation exception || VaccinatePoint object is null");
+            }
+            return vaccinatePoint;
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public RegulationsResponse regulations(String id) {
+        try {
+            return null;
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
+    }
+}
