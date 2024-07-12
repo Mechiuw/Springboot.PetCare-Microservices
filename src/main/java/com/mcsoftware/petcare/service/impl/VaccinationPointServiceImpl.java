@@ -84,7 +84,7 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
     @Override
     public VaccinatePointResponse getById(String id) {
         try {
-            return null;
+            return builderConverter.vaccinatePointResponseBuilderConvert(vpFinder(id));
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         } catch (ValidationException e) {
