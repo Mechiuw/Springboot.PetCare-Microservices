@@ -13,8 +13,7 @@ public interface WildAnimalService {
     void delete(String id);
     WildAnimalResponse getById(String id);
     List<WildAnimal> getAll();
-    WildAnimalResponse getWildAnimalVax(WildAnimalRequest wildAnimalRequest);
+    WildAnimalResponse getWildAnimalVax(String id);
     WildAnimal wildAnimalFinder(String id);
     WildAnimal wildAnimalValidator(WildAnimal wildAnimal);
-    RegulationsResponse regulations(String id);
 }

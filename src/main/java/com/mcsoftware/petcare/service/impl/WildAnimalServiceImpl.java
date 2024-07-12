@@ -103,17 +103,35 @@ public class WildAnimalServiceImpl implements WildAnimalService {
     }
 
     @Override
-    public WildAnimalResponse getWildAnimalVax(WildAnimalRequest wildAnimalRequest) {
-        return null;
+    public WildAnimalResponse getWildAnimalVax(String id) {
+        try {
+            WildAnimal foundAnimal = wildAnimalFinder(id);
+            return WildAnimalResponse.builder()
+                    .id(foundAnimal.getId())
+                    .breed(foundAnimal.getBreed())
+                    .animalType(foundAnimal.getAnimalType())
+                    .medicalConditions(foundAnimal.getMedicalConditions())
+                    .vaccinatePointId(foundAnimal.getVaccinatePointId().getId())
+                    .build();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
+
 
     @Override
     public WildAnimal wildAnimalFinder(String id) {
         try {
             return wildAnimalRepository.findById(id)
                     .orElseThrow(() -> new NoSuchElementException("not found any wild animal with id: " + id));
-        } catch (Exception e){
-            throw new RuntimeException(e.getCause());
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        }  catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
         }
     }
 
@@ -139,11 +157,5 @@ public class WildAnimalServiceImpl implements WildAnimalService {
             throw new ValidationException("Validation exception caught || Wild animal object is null");
         }
         return wildAnimal;
-    }
-
-
-    @Override
-    public RegulationsResponse regulations(String id) {
-        return null;
     }
 }
