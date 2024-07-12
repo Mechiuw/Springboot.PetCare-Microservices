@@ -16,6 +16,5 @@ public interface WildAnimalService {
     WildAnimalResponse getWildAnimalVax(WildAnimalRequest wildAnimalRequest);
     WildAnimal wildAnimalFinder();
     WildAnimal wildAnimalValidator();
-
     RegulationsResponse regulations(String id);
 }
