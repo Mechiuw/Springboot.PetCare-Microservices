@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class WildAnimalResponse {
+    private String id;
     private String breed;
     private EAnimal animalType;
     private String medicalConditions;

@@ -1,9 +1,6 @@
 package com.mcsoftware.petcare.model.converter;
 
-import com.mcsoftware.petcare.model.dto.request.ClientRequest;
-import com.mcsoftware.petcare.model.dto.request.PetRequest;
-import com.mcsoftware.petcare.model.dto.request.ServiceProviderRequest;
-import com.mcsoftware.petcare.model.dto.request.ShelterRequest;
+import com.mcsoftware.petcare.model.dto.request.*;
 import com.mcsoftware.petcare.model.dto.response.*;
 import com.mcsoftware.petcare.model.entity.*;
 
@@ -202,6 +199,35 @@ public class BuilderConverter {
                     .message(pet.getMedicalConditions())
                     .build();
         }catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public WildAnimal wildAnimalBuilderConvert(WildAnimalRequest wildAnimalRequest){
+        try {
+            return WildAnimal.builder()
+                    .breed(wildAnimalRequest.getBreed())
+                    .animalType(wildAnimalRequest.getAnimalType())
+                    .medicalConditions(wildAnimalRequest.getMedicalConditions())
+                    .locationFound(wildAnimalRequest.getLocationFound())
+                    .isAlive(wildAnimalRequest.getIsAlive())
+                    .build();
+        }catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+    public WildAnimalResponse wildAnimalResponseBuilderConvert(WildAnimal wildAnimal){
+        try{
+            return WildAnimalResponse.builder()
+                    .id(wildAnimal.getId())
+                    .breed(wildAnimal.getBreed())
+                    .animalType(wildAnimal.getAnimalType())
+                    .medicalConditions(wildAnimal.getMedicalConditions())
+                    .locationFound(wildAnimal.getLocationFound())
+                    .isAlive(wildAnimal.getIsAlive())
+                    .vaccinatePointId(wildAnimal.getVaccinatePointId().getId())
+                    .build();
+        } catch (Exception e){
             throw new RuntimeException(e.getCause());
         }
     }
