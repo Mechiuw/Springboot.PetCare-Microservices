@@ -104,24 +104,31 @@ public class ShelterServiceImpl implements ShelterService {
             validatedShelter.setCountry(shelterRequest.getCountry());
             validatedShelter.setPhoneNumber(shelterRequest.getPhoneNumber());
             validatedShelter.setIsActive(shelterRequest.getIsActive());
-            return null;
+            Shelter secondValidatedShelter = shelterValidator(validatedShelter);
+            Shelter updatedShelter = shelterRepository.saveAndFlush(secondValidatedShelter);
+            return builderConverter.shelterResponseBuilderConvert(updatedShelter);
         } catch (EntityNotFoundException e){
             throw new RuntimeException(e.getCause());
         } catch (ValidationException e) {
-            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+            throw new RuntimeException(String.format("Validation failed : %s", e.getMessage()), e);
         } catch (Exception e) {
-            throw new RuntimeException(e.getCause());
+            throw new RuntimeException(String.format("Failed to execute : %s", e.getMessage()), e);
         }
     }
 
     @Override
     public void delete(String id) {
         try{
-
+            shelterRepository.delete(
+                    shelterRepository.findById(id)
+                            .orElseThrow(
+                                    () -> new NoSuchElementException("not found any shelter")));
         } catch (EntityNotFoundException e){
             throw new RuntimeException(e.getCause());
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed : %s", e.getMessage()), e);
         } catch (Exception e) {
-            throw new RuntimeException(e.getCause());
+            throw new RuntimeException(String.format("Failed to execute : %s", e.getMessage()), e);
         }
     }
 
