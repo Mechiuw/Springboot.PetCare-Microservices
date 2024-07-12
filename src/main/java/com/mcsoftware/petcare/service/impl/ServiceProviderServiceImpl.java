@@ -11,8 +11,10 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -99,7 +101,19 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public List<ServiceProvider> getAll() {
-        return null;
+        try{
+            Optional<List<ServiceProvider>> a = Optional.of(serviceProviderRepository.findAll());
+            if(a.get().isEmpty()){
+                return Collections.emptyList();
+            }
+            return a.get();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
