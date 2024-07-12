@@ -93,12 +93,36 @@ public class ShelterServiceImpl implements ShelterService {
 
     @Override
     public ShelterResponse update(String id, ShelterRequest shelterRequest) {
-        return null;
+        try {
+            Shelter shelter = shelterFinder(id);
+            Shelter validatedShelter = shelterValidator(shelter);
+            validatedShelter.setName(shelterRequest.getName());
+            validatedShelter.setAddress(shelterRequest.getAddress());
+            validatedShelter.setEmail(shelterRequest.getEmail());
+            validatedShelter.setCity(shelterRequest.getCity());
+            validatedShelter.setPostalCode(shelterRequest.getPostalCode());
+            validatedShelter.setCountry(shelterRequest.getCountry());
+            validatedShelter.setPhoneNumber(shelterRequest.getPhoneNumber());
+            validatedShelter.setIsActive(shelterRequest.getIsActive());
+            return null;
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(e.getCause());
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     @Override
     public void delete(String id) {
+        try{
 
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(e.getCause());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     @Override

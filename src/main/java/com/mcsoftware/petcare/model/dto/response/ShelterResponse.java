@@ -21,6 +21,8 @@ public class ShelterResponse {
     private String email;
     private String city;
     private String postalCode;
+    private String country;
+    private String phoneNumber;
     private EStatus isActive;
     private List<Pet> petInShelter;
     private List<VaccinatePoint> vaccinatePoints;
