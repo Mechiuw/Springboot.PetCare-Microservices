@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +60,19 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void delete(String id) {
+        try{
+            Client foundClient = clientFinder(id);
+            if(foundClient != null){
+                clientRepository.delete(foundClient);
+            } else {
+                throw new EntityNotFoundException("not found any client with id : " + id);
+            }
 
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
