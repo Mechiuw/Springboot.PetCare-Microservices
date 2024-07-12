@@ -2,6 +2,7 @@ package com.mcsoftware.petcare.model.converter;
 
 import com.mcsoftware.petcare.model.dto.request.ClientRequest;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
+import com.mcsoftware.petcare.model.dto.request.ServiceProviderRequest;
 import com.mcsoftware.petcare.model.dto.request.ShelterRequest;
 import com.mcsoftware.petcare.model.dto.response.ClientResponse;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
@@ -138,6 +139,25 @@ public class BuilderConverter {
                     .isActive(shelter.getIsActive())
                     .build();
         }catch (Exception e) {
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public ServiceProvider serviceProviderBuilderConvert(ServiceProviderRequest serviceProviderRequest){
+        try{
+            return ServiceProvider.builder()
+                    .profileIdNumber(serviceProviderRequest.getProfileIdNumber())
+                    .firstName(serviceProviderRequest.getFirstName())
+                    .lastName(serviceProviderRequest.getLastName())
+                    .email(serviceProviderRequest.getEmail())
+                    .address(serviceProviderRequest.getAddress())
+                    .type(serviceProviderRequest.getType())
+                    .salary(serviceProviderRequest.getSalary())
+                    .isVaccinate(serviceProviderRequest.getIsVaccinate())
+                    .joinedDate(serviceProviderRequest.getJoinedDate())
+                    .status(serviceProviderRequest.getStatus())
+                    .build();
+        } catch (Exception e){
             throw new RuntimeException(e.getCause());
         }
     }
