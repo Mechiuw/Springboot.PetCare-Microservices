@@ -23,6 +23,7 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
     public ServiceProviderResponse create(ServiceProviderRequest serviceProviderRequest) {
         try {
             ServiceProvider newServiceProvider = builderConverter.serviceProviderBuilderConvert(serviceProviderRequest);
+
             return null;
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
@@ -75,6 +76,37 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public ServiceProvider spValidator(ServiceProvider serviceProvider) {
-        return null;
+        if(serviceProvider != null){
+            if (serviceProvider.getFirstName() == null || serviceProvider.getFirstName().trim().isEmpty()) {
+                throw new RuntimeException("Validation error || Service provider first name is empty");
+            }
+            if (serviceProvider.getLastName() == null || serviceProvider.getLastName().trim().isEmpty()) {
+                throw new RuntimeException("Validation error || Service provider last name is empty");
+            }
+            if (serviceProvider.getEmail() == null || serviceProvider.getEmail().trim().isEmpty()) {
+                throw new RuntimeException("Validation error || Service provider email is empty");
+            }
+            if (serviceProvider.getAddress() == null || serviceProvider.getAddress().trim().isEmpty()) {
+                throw new RuntimeException("Validation error || Service provider address is empty");
+            }
+            if (serviceProvider.getType() == null) {
+                throw new RuntimeException("Validation error || Service provider type is not set");
+            }
+            if (serviceProvider.getSalary() == null) {
+                throw new RuntimeException("Validation error || Service provider salary is not set");
+            }
+            if (serviceProvider.getIsVaccinate() == null) {
+                throw new RuntimeException("Validation error || Service provider vaccination status is not set");
+            }
+            if (serviceProvider.getJoinedDate() == null) {
+                throw new RuntimeException("Validation error || Service provider joined date is not set");
+            }
+            if (serviceProvider.getStatus() == null) {
+                throw new RuntimeException("Validation error || Service provider status is not set");
+            }
+        } else {
+            throw new RuntimeException("validation error");
+        }
+        return serviceProvider;
     }
 }
