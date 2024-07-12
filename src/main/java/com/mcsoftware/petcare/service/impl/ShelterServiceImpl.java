@@ -186,6 +186,19 @@ public class ShelterServiceImpl implements ShelterService {
 
     @Override
     public List<VaccinatePoint> getVaccinatePointList(String id) {
-        return null;
+        try {
+            Optional<Shelter> findShelter = shelterRepository.findById(id);
+            if (findShelter.isPresent()) {
+                return findShelter.get().getVaccinatePoints();
+            } else {
+                return Collections.emptyList();
+            }
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(e.getCause());
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed : %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute : %s", e.getMessage()), e);
+        }
     }
 }
