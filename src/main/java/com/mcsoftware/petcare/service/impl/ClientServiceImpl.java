@@ -77,7 +77,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponse getById(String id) {
-        return null;
+        try {
+            return builderConverter.clientResponseBuilder(clientFinder(id));
+        } catch (Exception e){
+            throw new RuntimeException("Failed to execute : " + e.getMessage());
+        }
     }
 
     @Override
