@@ -2,8 +2,10 @@ package com.mcsoftware.petcare.model.converter;
 
 import com.mcsoftware.petcare.model.dto.request.ClientRequest;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
+import com.mcsoftware.petcare.model.dto.request.ShelterRequest;
 import com.mcsoftware.petcare.model.dto.response.ClientResponse;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
+import com.mcsoftware.petcare.model.dto.response.ShelterResponse;
 import com.mcsoftware.petcare.model.entity.*;
 
 import java.util.concurrent.ExecutionException;
@@ -105,6 +107,37 @@ public class BuilderConverter {
                     .status(client.getStatus())
                     .build();
         } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public Shelter shelterBuilder(ShelterRequest shelterRequest){
+        try{
+            return Shelter.builder()
+                    .name(shelterRequest.getName())
+                    .address(shelterRequest.getAddress())
+                    .email(shelterRequest.getEmail())
+                    .city(shelterRequest.getCity())
+                    .postalCode(shelterRequest.getPostalCode())
+                    .isActive(shelterRequest.getIsActive())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public ShelterResponse shelterResponseBuilderConvert(Shelter shelter){
+        try{
+            return ShelterResponse.builder()
+                    .id(shelter.getId())
+                    .name(shelter.getName())
+                    .address(shelter.getAddress())
+                    .email(shelter.getEmail())
+                    .city(shelter.getCity())
+                    .postalCode(shelter.getPostalCode())
+                    .isActive(shelter.getIsActive())
+                    .build();
+        }catch (Exception e) {
             throw new RuntimeException(e.getCause());
         }
     }
