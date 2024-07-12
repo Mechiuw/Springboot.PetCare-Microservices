@@ -4,7 +4,10 @@ import com.mcsoftware.petcare.model.dto.request.VaccinatePointRequest;
 import com.mcsoftware.petcare.model.dto.response.RegulationsResponse;
 import com.mcsoftware.petcare.model.dto.response.VaccinatePointResponse;
 import com.mcsoftware.petcare.model.entity.VaccinatePoint;
+import com.mcsoftware.petcare.repository.ServiceProviderRepository;
+import com.mcsoftware.petcare.repository.ShelterRepository;
 import com.mcsoftware.petcare.repository.VaccinationPointRepository;
+import com.mcsoftware.petcare.repository.WildAnimalRepository;
 import com.mcsoftware.petcare.service.interfaces.VaccinationPointService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -12,6 +15,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +23,9 @@ import java.util.List;
 public class VaccinationPointServiceImpl implements VaccinationPointService {
     private final VaccinationPointRepository vaccinationPointRepository;
     private final BuilderConverter builderConverter;
-
+    private final ServiceProviderRepository serviceProviderRepository;
+    private final ShelterRepository shelterRepository;
+    private final WildAnimalRepository wildAnimalRepository;
     @Override
     public VaccinatePointResponse create(VaccinatePointRequest vaccinatePointRequest) {
         try {
@@ -39,7 +45,18 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
     @Override
     public VaccinatePointResponse update(String id, VaccinatePointRequest vaccinatePointRequest) {
         try {
-            return null;
+            VaccinatePoint findVp = vpFinder(id);
+
+            findVp.setFirstVaccineDate(vaccinatePointRequest.getFirstVaccinateDate());
+            findVp.setSecondVaccineDate(vaccinatePointRequest.getSecondVaccinateDate());
+            findVp.setServiceProviderId(serviceProviderRepository.findById(vaccinatePointRequest.getServiceProviderId())
+                    .orElseThrow(() -> new NoSuchElementException("not found any service provider")));
+            findVp.setShelterId(shelterRepository.findById(vaccinatePointRequest.getShelterId())
+                    .orElseThrow(() -> new NoSuchElementException("not found any shelter id")));
+            findVp.setWildAnimalId(wildAnimalRepository.findById(vaccinatePointRequest.getShelterId())
+                    .orElseThrow(() -> new NoSuchElementException("not found any wild animal id")));
+            VaccinatePoint savedVp = vaccinationPointRepository.saveAndFlush(findVp);
+            return builderConverter.vaccinatePointResponseBuilderConvert(savedVp);
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         } catch (ValidationException e) {
@@ -89,9 +106,11 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
     }
 
     @Override
-    public VaccinatePointResponse vpFinder(String id) {
+    public VaccinatePoint vpFinder(String id) {
         try {
-            return null;
+            return vaccinationPointRepository
+                    .findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("not found any vp entity with id : " + id));
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         }  catch (Exception e) {

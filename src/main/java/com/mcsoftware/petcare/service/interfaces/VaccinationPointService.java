@@ -12,7 +12,7 @@ public interface VaccinationPointService {
     void delete(String id);
     VaccinatePointResponse getById(String id);
     List<VaccinatePoint> getAll();
-    VaccinatePointResponse vpFinder(String id);
+    VaccinatePoint vpFinder(String id);
     VaccinatePoint vpValidator(VaccinatePoint vaccinatePoint);
     RegulationsResponse regulations(String id);
 }
