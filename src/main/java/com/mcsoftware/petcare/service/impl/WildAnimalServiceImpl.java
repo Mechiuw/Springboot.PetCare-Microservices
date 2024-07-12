@@ -7,6 +7,7 @@ import com.mcsoftware.petcare.model.dto.response.WildAnimalResponse;
 import com.mcsoftware.petcare.model.entity.WildAnimal;
 import com.mcsoftware.petcare.repository.WildAnimalRepository;
 import com.mcsoftware.petcare.service.interfaces.WildAnimalService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,18 @@ public class WildAnimalServiceImpl implements WildAnimalService {
 
     @Override
     public WildAnimalResponse create(WildAnimalRequest wildAnimalRequest) {
-        WildAnimal newAnimal = builderConverter.wildAnimalBuilderConvert(wildAnimalRequest);
-
-        return null;
+        try {
+            WildAnimal newAnimal = builderConverter.wildAnimalBuilderConvert(wildAnimalRequest);
+            WildAnimal validatedAnimal = wildAnimalValidator(newAnimal);
+            WildAnimal savedAnimal = wildAnimalRepository.save(validatedAnimal);
+            return builderConverter.wildAnimalResponseBuilderConvert(savedAnimal);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
