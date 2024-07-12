@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,32 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public ServiceProviderResponse update(String id, ServiceProviderRequest serviceProviderRequest) {
-        return null;
+        try {
+            ServiceProvider foundSp = spFinder(id);
+            assert serviceProviderRequest != null : "service provider request can't be null";
+            if (foundSp != null) {
+                foundSp.setProfileIdNumber(serviceProviderRequest.getProfileIdNumber());
+                foundSp.setFirstName(serviceProviderRequest.getFirstName());
+                foundSp.setLastName(serviceProviderRequest.getLastName());
+                foundSp.setEmail(serviceProviderRequest.getEmail());
+                foundSp.setAddress(serviceProviderRequest.getAddress());
+                foundSp.setType(serviceProviderRequest.getType());
+                foundSp.setSalary(serviceProviderRequest.getSalary());
+                foundSp.setIsVaccinate(serviceProviderRequest.getIsVaccinate());
+                foundSp.setJoinedDate(serviceProviderRequest.getJoinedDate());
+                foundSp.setStatus(serviceProviderRequest.getStatus());
+                ServiceProvider savedSp = serviceProviderRepository.save(foundSp);
+                return builderConverter.serviceProviderResponseBuilderConvert(savedSp);
+            } else {
+                throw new RuntimeException("failed to Execute");
+            }
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
@@ -72,7 +98,16 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public ServiceProvider spFinder(String id) {
-        return null;
+        try {
+            return serviceProviderRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("not found any service provider with id : " + id));
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
