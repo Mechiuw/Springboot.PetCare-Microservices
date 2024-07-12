@@ -37,7 +37,24 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponse update(String id, ClientRequest clientRequest) {
-        return null;
+        try {
+            Client foundClient = clientFinder(id);
+            foundClient.setFirstName(clientRequest.getFirstName());
+            foundClient.setLastName(clientRequest.getLastName());
+            foundClient.setEmail(clientRequest.getEmail());
+            foundClient.setAddress(clientRequest.getAddress());
+            foundClient.setPhoneNumber(clientRequest.getPhoneNumber());
+            foundClient.setStatus(clientRequest.getStatus());
+            Client validatedClient = clientValidator(foundClient);
+            Client savedClient = clientRepository.save(validatedClient);
+            return builderConverter.clientResponseBuilder(savedClient);
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found: " + e.getMessage());
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
