@@ -68,7 +68,18 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public void delete(String id) {
-
+        try{
+            serviceProviderRepository.delete(serviceProviderRepository
+                    .findById(id)
+                    .orElseThrow(
+                            () -> new NoSuchElementException("not found any service provider with id : " + id)));
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
