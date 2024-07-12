@@ -134,7 +134,17 @@ public class ShelterServiceImpl implements ShelterService {
 
     @Override
     public ShelterResponse getById(String id) {
-        return null;
+        try {
+            return builderConverter.
+                    shelterResponseBuilderConvert(
+                            shelterFinder(id));
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(e.getCause());
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed : %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute : %s", e.getMessage()), e);
+        }
     }
 
     @Override
