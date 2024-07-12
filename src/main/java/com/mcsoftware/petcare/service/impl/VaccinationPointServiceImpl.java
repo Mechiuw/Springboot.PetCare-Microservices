@@ -69,7 +69,9 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
     @Override
     public void delete(String id) {
         try {
-
+            vaccinationPointRepository.delete(
+                    vaccinationPointRepository.findById(id)
+                            .orElseThrow(() -> new NoSuchElementException("not found any vaccination point")));
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
         } catch (ValidationException e) {
