@@ -84,7 +84,17 @@ public class ServiceProviderServiceImpl implements ServiceProviderService {
 
     @Override
     public ServiceProviderResponse getById(String id) {
-        return null;
+        try{
+            ServiceProvider foundSp = spFinder(id);
+            ServiceProvider validatedSp = spValidator(foundSp);
+            return builderConverter.serviceProviderResponseBuilderConvert(validatedSp);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
