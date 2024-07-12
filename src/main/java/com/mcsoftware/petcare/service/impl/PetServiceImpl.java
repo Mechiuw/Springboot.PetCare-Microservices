@@ -17,6 +17,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -143,7 +144,7 @@ public class PetServiceImpl implements PetService {
         try {
             List<Pet> pets = petRepository.findAll();
             if (pets.isEmpty()){
-                throw new RuntimeException("Pet list is empty");
+                return Collections.emptyList();
             }
             return pets;
         } catch (EntityNotFoundException e){

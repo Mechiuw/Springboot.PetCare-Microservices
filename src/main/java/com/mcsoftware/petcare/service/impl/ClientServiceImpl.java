@@ -12,6 +12,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -86,13 +87,33 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> getAll() {
-        return null;
+        try {
+            List<Client> clients = clientRepository.findAll();
+            if (!clients.isEmpty()){
+                return clients;
+            } else {
+                return Collections.emptyList();
+            }
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
     public List<Pet> getAllListAdopting(String id) {
-
-        return null;
+        try {
+            Client findClient = clientFinder(id);
+            List<Pet> pets = findClient.getListAdopting();
+            if (pets.isEmpty()){
+                return Collections.emptyList();
+            } return pets;
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
