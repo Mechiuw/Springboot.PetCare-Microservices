@@ -14,8 +14,8 @@ public interface ShelterService {
     void delete(String id);
     ShelterResponse getById(String id);
     List<Shelter> getAll();
-    List<Pet> getAllPetInShelter();
-    List<VaccinatePoint> getVaccinatePointList();
+    List<Pet> getAllPetInShelter(String id);
+    List<VaccinatePoint> getVaccinatePointList(String id);
 
     Shelter shelterFinder(String id);
     Shelter shelterValidator(Shelter shelter);

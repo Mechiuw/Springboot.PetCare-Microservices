@@ -16,12 +16,13 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ShelterServiceImpl implements ShelterService {
-    private ShelterRepository shelterRepository;
-    private BuilderConverter builderConverter;
+    private final ShelterRepository shelterRepository;
+    private final BuilderConverter builderConverter;
 
 
     @Override
@@ -166,12 +167,25 @@ public class ShelterServiceImpl implements ShelterService {
     }
 
     @Override
-    public List<Pet> getAllPetInShelter() {
-        return null;
+    public List<Pet> getAllPetInShelter(String id) {
+        try {
+            Optional<Shelter> findShelter = shelterRepository.findById(id);
+            if (findShelter.isPresent()) {
+                return findShelter.get().getPetInShelter();
+            } else {
+                return Collections.emptyList();
+            }
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(e.getCause());
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed : %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute : %s", e.getMessage()), e);
+        }
     }
 
     @Override
-    public List<VaccinatePoint> getVaccinatePointList() {
+    public List<VaccinatePoint> getVaccinatePointList(String id) {
         return null;
     }
 }
