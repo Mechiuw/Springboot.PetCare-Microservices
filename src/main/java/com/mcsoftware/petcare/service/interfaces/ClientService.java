@@ -14,7 +14,10 @@ public interface ClientService {
     void delete(String id);
     ClientResponse getById(String id);
     List<Client> getAll();
-    List<Pet> getAllListAdopting();
+    List<Pet> getAllListAdopting(String id);
+
+    //FINDER
+    Client clientFinder(String id);
 
     //VALIDATOR
     Client clientValidator(Client client);

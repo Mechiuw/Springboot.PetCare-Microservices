@@ -1,11 +1,9 @@
 package com.mcsoftware.petcare.model.converter;
 
+import com.mcsoftware.petcare.model.dto.request.ClientRequest;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
-import com.mcsoftware.petcare.model.entity.Pet;
-import com.mcsoftware.petcare.model.entity.ServiceProvider;
-import com.mcsoftware.petcare.model.entity.Shelter;
-import com.mcsoftware.petcare.model.entity.WildAnimal;
+import com.mcsoftware.petcare.model.entity.*;
 
 public class BuilderConverter {
 
@@ -69,6 +67,22 @@ public class BuilderConverter {
                     .medicalConditions(wildAnimal.getMedicalConditions())
                     .shelterAdoptId(shelterAdoptId)
                     .serviceProviderId(serviceProviderId)
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public Client clientBuilderConvert(ClientRequest clientRequest){
+        try{
+            return Client.builder()
+                    .firstName(clientRequest.getFirstName())
+                    .lastName(clientRequest.getLastName())
+                    .profileIdNumber(clientRequest.getProfileIdNumber())
+                    .email(clientRequest.getEmail())
+                    .address(clientRequest.getAddress())
+                    .phoneNumber(clientRequest.getPhoneNumber())
+                    .status(clientRequest.getStatus())
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());
