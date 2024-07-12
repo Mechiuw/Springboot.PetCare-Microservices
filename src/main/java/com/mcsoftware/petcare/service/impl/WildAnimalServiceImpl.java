@@ -59,12 +59,28 @@ public class WildAnimalServiceImpl implements WildAnimalService {
 
     @Override
     public void delete(String id) {
-
+        try {
+            wildAnimalRepository.delete(wildAnimalFinder(id));
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
     public WildAnimalResponse getById(String id) {
-        return null;
+        try {
+            return builderConverter.wildAnimalResponseBuilderConvert(wildAnimalFinder(id));
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
