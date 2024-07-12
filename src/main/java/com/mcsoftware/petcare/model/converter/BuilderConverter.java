@@ -4,10 +4,7 @@ import com.mcsoftware.petcare.model.dto.request.ClientRequest;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
 import com.mcsoftware.petcare.model.dto.request.ServiceProviderRequest;
 import com.mcsoftware.petcare.model.dto.request.ShelterRequest;
-import com.mcsoftware.petcare.model.dto.response.ClientResponse;
-import com.mcsoftware.petcare.model.dto.response.PetResponse;
-import com.mcsoftware.petcare.model.dto.response.ServiceProviderResponse;
-import com.mcsoftware.petcare.model.dto.response.ShelterResponse;
+import com.mcsoftware.petcare.model.dto.response.*;
 import com.mcsoftware.petcare.model.entity.*;
 
 import java.util.concurrent.ExecutionException;
@@ -193,6 +190,18 @@ public class BuilderConverter {
                     .status(serviceProvider.getStatus())
                     .build();
         } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public BehaviorResponse petBehaviorResponseBuilder(Pet pet){
+        try{
+            return BehaviorResponse.builder()
+                    .petId(pet.getId())
+                    .petBehavior(pet.getBehavior())
+                    .message(pet.getMedicalConditions())
+                    .build();
+        }catch (Exception e){
             throw new RuntimeException(e.getCause());
         }
     }

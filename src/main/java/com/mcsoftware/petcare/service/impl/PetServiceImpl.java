@@ -193,9 +193,9 @@ public class PetServiceImpl implements PetService {
             if (currentPet.getBehavior() == null) {
                 currentPet.setBehavior(EPetBehavior.valueOf(behavior));
                 Pet updatedPet = petRepository.save(currentPet);
-                return Optional.ofNullable(builderConverter.petResponseBuilder(updatedPet));
+                return Optional.ofNullable(builderConverter.petBehaviorResponseBuilder(updatedPet));
             } else {
-                return Optional.ofNullable(builderConverter.petResponseBuilder(currentPet));
+                return Optional.ofNullable(builderConverter.petBehaviorResponseBuilder(currentPet));
             }
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()));
