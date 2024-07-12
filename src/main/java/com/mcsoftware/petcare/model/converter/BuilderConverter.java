@@ -2,8 +2,11 @@ package com.mcsoftware.petcare.model.converter;
 
 import com.mcsoftware.petcare.model.dto.request.ClientRequest;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
+import com.mcsoftware.petcare.model.dto.response.ClientResponse;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
 import com.mcsoftware.petcare.model.entity.*;
+
+import java.util.concurrent.ExecutionException;
 
 public class BuilderConverter {
 
@@ -83,6 +86,23 @@ public class BuilderConverter {
                     .address(clientRequest.getAddress())
                     .phoneNumber(clientRequest.getPhoneNumber())
                     .status(clientRequest.getStatus())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public ClientResponse clientResponseBuilder(Client client){
+        try{
+            return ClientResponse.builder()
+                    .id(client.getId())
+                    .firstName(client.getFirstName())
+                    .lastName(client.getLastName())
+                    .profileIdNumber(client.getProfileIdNumber())
+                    .email(client.getEmail())
+                    .address(client.getAddress())
+                    .phoneNumber(client.getPhoneNumber())
+                    .status(client.getStatus())
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());

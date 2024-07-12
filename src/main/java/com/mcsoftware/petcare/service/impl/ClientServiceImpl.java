@@ -22,8 +22,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponse create(ClientRequest clientRequest) {
         try {
-
-            return null;
+            Client convertedClient = builderConverter.clientBuilderConvert(clientRequest);
+            Client validatedClient = clientValidator(convertedClient);
+            Client savedClient = clientRepository.save(validatedClient);
+            return builderConverter.clientResponseBuilder(savedClient);
         } catch (EntityNotFoundException e){
             throw new RuntimeException("Entity not found: " + e.getMessage());
         } catch (ValidationException e) {
