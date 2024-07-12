@@ -13,6 +13,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -149,7 +150,19 @@ public class ShelterServiceImpl implements ShelterService {
 
     @Override
     public List<Shelter> getAll() {
-        return null;
+        try {
+            if(shelterRepository.findAll().isEmpty()){
+                return Collections.emptyList();
+            } else {
+                return shelterRepository.findAll();
+            }
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException(e.getCause());
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed : %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute : %s", e.getMessage()), e);
+        }
     }
 
     @Override
