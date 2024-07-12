@@ -12,6 +12,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -85,7 +86,20 @@ public class WildAnimalServiceImpl implements WildAnimalService {
 
     @Override
     public List<WildAnimal> getAll() {
-        return null;
+        try {
+            List<WildAnimal> fetch = wildAnimalRepository.findAll();
+            if(!fetch.isEmpty()){
+                return fetch;
+            } else {
+                return Collections.emptyList();
+            }
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
+        }
     }
 
     @Override
