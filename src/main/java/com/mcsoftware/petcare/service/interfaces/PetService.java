@@ -1,14 +1,17 @@
 package com.mcsoftware.petcare.service.interfaces;
 
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
+import com.mcsoftware.petcare.model.dto.response.BehaviorResponse;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
 import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.model.entity.ServiceProvider;
 import com.mcsoftware.petcare.model.entity.Shelter;
 import com.mcsoftware.petcare.model.entity.WildAnimal;
+import com.mcsoftware.petcare.model.struct.Animal;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PetService {
 
@@ -29,5 +32,7 @@ public interface PetService {
 
     //VALIDATORS
     PetRequest petValidator(PetRequest petRequest);
+
+    Optional<?> currentBehavior(String id,String behavior);
 
 }

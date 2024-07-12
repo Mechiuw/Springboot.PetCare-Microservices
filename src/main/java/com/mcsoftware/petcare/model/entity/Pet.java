@@ -53,8 +53,3 @@ public class Pet extends Animal {
     @JoinColumn(name = "service_provider",referencedColumnName = "id")
     private ServiceProvider serviceProviderId;
 }
-
-
-
-
-

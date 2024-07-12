@@ -1,13 +1,16 @@
 package com.mcsoftware.petcare.model.struct;
 
 import com.mcsoftware.petcare.constant.EPetBehavior;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public abstract class Animal {
-    public EPetBehavior behavior;
+    private EPetBehavior behavior;
 
-    public EPetBehavior currentBehavior() {
+    private EPetBehavior currentBehavior() {
         return this.behavior;
     }
 }

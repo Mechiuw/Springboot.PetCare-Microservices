@@ -1,5 +1,6 @@
 package com.mcsoftware.petcare.service.impl;
 
+import com.mcsoftware.petcare.constant.EPetBehavior;
 import com.mcsoftware.petcare.model.converter.BuilderConverter;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
@@ -17,10 +18,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -188,5 +186,23 @@ public class PetServiceImpl implements PetService {
         }
     }
 
-
+    @Override
+    public Optional<?> currentBehavior(String id, String behavior) {
+        try {
+            Pet currentPet = petFinder(id);
+            if (currentPet.getBehavior() == null) {
+                currentPet.setBehavior(EPetBehavior.valueOf(behavior));
+                Pet updatedPet = petRepository.save(currentPet);
+                return Optional.ofNullable(builderConverter.petResponseBuilder(updatedPet));
+            } else {
+                return Optional.ofNullable(builderConverter.petResponseBuilder(currentPet));
+            }
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()));
+        } catch (ValidationException e) {
+            throw new RuntimeException(String.format("Validation exception caught: %s", e.getMessage()));
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()));
+        }
+    }
 }
