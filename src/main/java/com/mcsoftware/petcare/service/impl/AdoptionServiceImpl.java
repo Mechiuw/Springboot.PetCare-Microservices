@@ -82,7 +82,7 @@ public class AdoptionServiceImpl implements AdoptionService {
     @Override
     public AdoptionResponse getById(String id) {
         try{
-            return null;
+            return converter.adoptionToAdoptionResponse(finder.adoptionFinder(id));
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
         } catch (EntityNotFoundException e){
@@ -95,7 +95,10 @@ public class AdoptionServiceImpl implements AdoptionService {
     @Override
     public List<Adoption> getAll() {
         try{
-            return null;
+            if(adoptionRepository.findAll().isEmpty()){
+                return Collections.emptyList();
+            }
+            return adoptionRepository.findAll();
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
         } catch (EntityNotFoundException e){
