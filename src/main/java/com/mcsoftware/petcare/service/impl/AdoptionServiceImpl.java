@@ -65,8 +65,10 @@ public class AdoptionServiceImpl implements AdoptionService {
     public AdoptionResponse softDelete(String id) {
         try{
             Adoption findAdoption = finder.adoptionFinder(id);
-            findAdoption.setClientId(new Client("DEL","DEL","DEL","DEL","DEL","DEL","DEL", EStatus.INACTIVE, Collections.emptyList()));
-            findAdoption.setShelterId(new Shelter("DEL","DEL","DEL","DEL","DEL","DEL","DEL","DEL",EStatus.INACTIVE,Collections.emptyList(),Collections.emptyList()));
+            findAdoption.setClientId(new Client("DEL","DEL","DEL","DEL",
+                    "DEL","DEL","DEL", EStatus.INACTIVE, Collections.emptyList()));
+            findAdoption.setShelterId(new Shelter("DEL","DEL","DEL","DEL","DEL",
+                    "DEL","DEL","DEL",EStatus.INACTIVE,Collections.emptyList(),Collections.emptyList()));
             findAdoption.setAdoptionDetailList(Collections.emptyList());
             Adoption softDeletedAdoption = adoptionRepository.saveAndFlush(findAdoption);
             return converter.adoptionToAdoptionResponse(softDeletedAdoption);
