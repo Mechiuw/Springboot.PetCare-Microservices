@@ -44,7 +44,8 @@ public class AdoptionServiceImpl implements AdoptionService {
     public AdoptionResponse update(String id, AdoptionRequest adoptionRequest) {
         try {
             Adoption findAdoption = finder.adoptionFinder(id);
-            findAdoption.setClientId();
+            findAdoption.setClientId(finder.clientFinder(adoptionRequest.getClientId()));
+            findAdoption.setShelterId(finder.shelterFinder(adoptionRequest.getShelterId()));
             return null;
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
