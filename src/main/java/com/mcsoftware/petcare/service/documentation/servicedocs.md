@@ -1,63 +1,47 @@
-package com.mcsoftware.petcare.service.impl;
-import com.mcsoftware.petcare.utils.converter.BuilderConverter;
-import com.mcsoftware.petcare.model.dto.request.VaccinatePointRequest;
-import com.mcsoftware.petcare.model.dto.response.RegulationsResponse;
-import com.mcsoftware.petcare.model.dto.response.VaccinatePointResponse;
-import com.mcsoftware.petcare.model.entity.VaccinatePoint;
-import com.mcsoftware.petcare.repository.ServiceProviderRepository;
-import com.mcsoftware.petcare.repository.ShelterRepository;
-import com.mcsoftware.petcare.repository.VaccinationPointRepository;
-import com.mcsoftware.petcare.repository.WildAnimalRepository;
-import com.mcsoftware.petcare.service.interfaces.VaccinationPointService;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+<h1>Pet care Services</h1>
+<div class="service-desc"> 
+    <p>this page is for service documentations, <br> 
+    specifically for services in this Pet Care BE application.</p> 
+</div>
 
-@Service
-@RequiredArgsConstructor
-@Transactional(rollbackOn = Exception.class)
-public class VaccinationPointServiceImpl implements VaccinationPointService {
-    private final VaccinationPointRepository vaccinationPointRepository;
-    private final BuilderConverter builderConverter;
-    private final ServiceProviderRepository serviceProviderRepository;
-    private final ShelterRepository shelterRepository;
-    private final WildAnimalRepository wildAnimalRepository;
-    @Override
-    public VaccinatePointResponse create(VaccinatePointRequest vaccinatePointRequest) {
-        try {
-            //[BUILD] build vaccinate point entity
-            VaccinatePoint vaccinatePoint = builderConverter.vaccinatePointBuilderConvert(vaccinatePointRequest);
-
-            //[FILTER] filter vp entity using validator helper class
-            VaccinatePoint validatedVaccinatePoint = vpValidator(vaccinatePoint);
-
-            //[SAVE] send validated vp entity to repo and save it
-            VaccinatePoint savedVp = vaccinationPointRepository.saveAndFlush(validatedVaccinatePoint);
-
-            //[BUILD] || [RETURN] build the response from the saved vp entity and returns it
-            return builderConverter.vaccinatePointResponseBuilderConvert(savedVp);
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
-        } catch (ValidationException e) {
-            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
-        } catch (Exception e) {
-            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
-        }
+<div class="service-desc"> 
+    <h2>Service Structure</h2>
+    <label>Create Service from "VaccinationPointServiceImpl"</label><br>
+<pre><code>
+@Override
+public VaccinatePointResponse create(VaccinatePointRequest vaccinatePointRequest) {
+    try {
+        //[BUILD] build vaccinate point entity
+        VaccinatePoint vaccinatePoint = builderConverter.vaccinatePointBuilderConvert(vaccinatePointRequest);
+<br>
+        //[FILTER] filter vp entity using validator helper class
+        VaccinatePoint validatedVaccinatePoint = vpValidator(vaccinatePoint);
+<br>
+        //[SAVE] send validated vp entity to repo and save it
+        VaccinatePoint savedVp = vaccinationPointRepository.saveAndFlush(validatedVaccinatePoint);
+<br>
+        //[BUILD] || [RETURN] build the response from the saved vp entity and returns it
+        return builderConverter.vaccinatePointResponseBuilderConvert(savedVp);
+<br>
+        //[CATCHERS] Exception Catchers for Not found,validation,and other Exceptions
+    } catch (EntityNotFoundException e) {
+        throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
+    } catch (ValidationException e) {
+        throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
+    } catch (Exception e) {
+        throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
     }
-
-    @Override
+}
+</code></pre>
+    <label>Update Service from "VaccinationPointServiceImpl"</label><br>
+<pre><code>
+@Override
     public VaccinatePointResponse update(String id, VaccinatePointRequest vaccinatePointRequest) {
         try {
             //[FIND] Find the existing vp entity from database
             VaccinatePoint findVp = vpFinder(id);
-
+<br>
             //[UPDATE] Update each property vp entity has
             findVp.setFirstVaccineDate(vaccinatePointRequest.getFirstVaccinateDate());
             findVp.setSecondVaccineDate(vaccinatePointRequest.getSecondVaccinateDate());
@@ -67,10 +51,10 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
                     .orElseThrow(() -> new NoSuchElementException("not found any shelter id")));
             findVp.setWildAnimalId(wildAnimalRepository.findById(vaccinatePointRequest.getShelterId())
                     .orElseThrow(() -> new NoSuchElementException("not found any wild animal id")));
-
+<br>
             //[SAVE] save the changes on recent updated entity to send it to database
             VaccinatePoint savedVp = vaccinationPointRepository.saveAndFlush(findVp);
-
+<br>
             //[BUILD] || [RETURN]  build the response from the saved vp entity and returns it
             return builderConverter.vaccinatePointResponseBuilderConvert(savedVp);
         } catch (EntityNotFoundException e) {
@@ -81,8 +65,11 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
             throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
         }
     }
-
-    @Override
+</code></pre>
+    <label>Delete Service from "VaccinationPointServiceImpl"</label><br>
+<pre>
+<code>
+@Override
     public void delete(String id) {
         try {
             //[RETURN] Directly execute delete repo service by getting the entity from id and deletes it
@@ -97,8 +84,11 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
             throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
         }
     }
-
-    @Override
+</code>
+</pre>
+    <label>Get By Id Service from "VaccinationPointServiceImpl"</label><br>
+<pre><code>
+@Override
     public VaccinatePointResponse getById(String id) {
         try {
             //[RETURN] find and return the entity using finder function (finder -> entity),returns the response convert (entity -> response)
@@ -111,8 +101,10 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
             throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
         }
     }
-
-    @Override
+</code></pre>
+    <label>Get All Service from "VaccinationPointServiceImpl"</label><br>
+<pre><code>
+@Override
     public List<VaccinatePoint> getAll() {
         try {
             //[FETCH] Fetch All vp data from repo
@@ -133,8 +125,14 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
             throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
         }
     }
-
-    @Override
+</code></pre>
+<div>
+<br>
+<div>
+    <h2>Helper Structure</h2>
+    <label>Finder Function Example</label>
+<pre><code>
+@Override
     public VaccinatePoint vpFinder(String id) {
         try {
             //[RETURN] it returns an entity by checking the repo by id
@@ -147,8 +145,10 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
             throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
         }
     }
-
-    @Override
+</code></pre>
+    <label>Validator Function Example</label>
+<pre><code>
+@Override
     public VaccinatePoint vpValidator(VaccinatePoint vaccinatePoint) {
         try {
             //[CONDITIONS] checks every each vp entity body request or presented vp entity and assert to be not null
@@ -178,32 +178,17 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
             throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
         }
     }
+</code></pre>
+</div>
 
-    @Override
-    public RegulationsResponse regulations(String id) {
-        try {
-            Optional<VaccinatePoint> vaccinatePoint = vaccinationPointRepository.findById(id);
-            if(vaccinatePoint.isPresent()) {
-                return RegulationsResponse.builder()
-                        .wildAnimalId(vaccinatePoint.get().getWildAnimalId().getId())
-                        .locationFound(vaccinatePoint.get().getWildAnimalId().getLocationFound())
-                        .medicalConditions(vaccinatePoint.get().getWildAnimalId().getMedicalConditions())
-                        .vaccinatePointId(vaccinatePoint.get().getId())
-                        .regulations(
-                                vaccinatePoint.get().animalControl(
-                                vaccinatePoint.get().getWildAnimalId().getBreed(),
-                                vaccinatePoint.get().getServiceProviderId().getFirstName(),
-                                "CONFIRMED"))
-                        .build();
-            } else {
-                throw new NoSuchElementException("vaccinate point is not present");
-            }
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException(String.format("Entity not found: %s", e.getMessage()), e);
-        } catch (ValidationException e) {
-            throw new RuntimeException(String.format("Validation failed: %s", e.getMessage()), e);
-        } catch (Exception e) {
-            throw new RuntimeException(String.format("Failed to execute: %s", e.getMessage()), e);
-        }
-    }
-}
+<div >
+<h1>That's All!</h1>
+<p>I hope you find this documentation well, <br>
+    and if there's any possible bugs or errors, lmk!</p>
+<h5>My Contact : </h5>
+<label>Email : matthewdpk@gmail.com</label><br>
+<label>Github : <link urn="https://github.com/Mechiuw">Mechiuw</label><br>
+</div>
+
+
+
