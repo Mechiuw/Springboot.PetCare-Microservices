@@ -7,7 +7,7 @@ import com.mcsoftware.petcare.model.entity.Adoption;
 import java.util.List;
 
 public interface AdoptionService {
-    AdoptionResponse create(AdoptionRequest adoptionRequest);
+    AdoptionResponse create(AdoptionRequest adoptionRequest) throws IllegalAccessException;
     AdoptionResponse update(String id,AdoptionRequest adoptionRequest);
     AdoptionResponse softDelete(String id);
     AdoptionResponse getById(String id);

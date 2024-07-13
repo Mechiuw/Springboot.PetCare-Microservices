@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TransactionFinder {
     private final AdoptionRepository adoptionRepository;
+
     public Adoption adoptionFinder(String id){
         try{
             return adoptionRepository.findById(id)

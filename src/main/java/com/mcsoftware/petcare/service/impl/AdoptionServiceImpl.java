@@ -6,7 +6,10 @@ import com.mcsoftware.petcare.model.entity.Adoption;
 import com.mcsoftware.petcare.repository.AdoptionRepository;
 import com.mcsoftware.petcare.service.interfaces.AdoptionService;
 import com.mcsoftware.petcare.utils.converter.TransactionBuilderConverter;
+import com.mcsoftware.petcare.utils.validator.TransactionValidator;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +20,35 @@ import java.util.List;
 @Transactional(rollbackOn = Exception.class)
 public class AdoptionServiceImpl implements AdoptionService {
     private final AdoptionRepository adoptionRepository;
-    private final TransactionBuilderConverter transactionBuilderConverter;
-
+    private final TransactionBuilderConverter transactionConverter;
+    private final TransactionValidator validator;
     @Override
-    public AdoptionResponse create(AdoptionRequest adoptionRequest) {
-
-        return null;
+    public AdoptionResponse create(AdoptionRequest adoptionRequest) throws IllegalAccessException {
+        try {
+            Adoption newAdoption = transactionConverter.adoptionRequestToAdoption(adoptionRequest);
+            Adoption validatedAdoption = validator.adoptionValidator(newAdoption);
+            Adoption savedAdoption = adoptionRepository.save(validatedAdoption);
+            return transactionConverter.adoptionToAdoptionResponse(savedAdoption);
+        } catch (ValidationException e){
+            throw new RuntimeException("Validation error: " + e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found error: " + e.getMessage());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to execute: " + e.getMessage());
+        }
     }
 
     @Override
     public AdoptionResponse update(String id, AdoptionRequest adoptionRequest) {
-        return null;
+        try {
+            return null
+        } catch (ValidationException e){
+            throw new RuntimeException("Validation error: " + e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found error: " + e.getMessage());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to execute: " + e.getMessage());
+        }
     }
 
     @Override
