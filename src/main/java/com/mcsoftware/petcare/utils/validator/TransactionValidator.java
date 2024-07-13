@@ -1,7 +1,7 @@
 package com.mcsoftware.petcare.utils.validator;
 
 import com.mcsoftware.petcare.model.entity.Adoption;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ValidationException;
 import org.hibernate.PropertyNotFoundException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -15,24 +15,36 @@ public class TransactionValidator {
 
     @Bean
     public Map<String,Object> objToMap(Object obj) throws IllegalAccessException {
-        Map<String,Object> mapped = new HashMap<>();
-        Field[] fields = obj.getClass().getDeclaredFields();
+        try {
+            Map<String, Object> mapped = new HashMap<>();
+            Field[] fields = obj.getClass().getDeclaredFields();
 
-        for( Field f : fields){
-            f.setAccessible(true);
-            mapped.put(f.getName(),f.get(obj));
+            for (Field f : fields) {
+                f.setAccessible(true);
+                mapped.put(f.getName(), f.get(obj));
+            }
+            return mapped;
+        } catch (ValidationException e){
+            throw new RuntimeException(e.getMessage());
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
         }
-        return mapped;
     }
 
     @Bean
     public Adoption adoptionValidator(Adoption adoption) throws IllegalAccessException {
-        Map<String,Object> mapped = objToMap(adoption);
-        for(Map.Entry<String,Object> x : mapped.entrySet()){
-            if(x.getValue() == null){
-                throw new PropertyNotFoundException(String.format("%s can't be null",x.getKey()));
+        try {
+            Map<String, Object> mapped = objToMap(adoption);
+            for (Map.Entry<String, Object> entry : mapped.entrySet()) {
+                if (entry.getValue() == null) {
+                    throw new PropertyNotFoundException(String.format("%s can't be null", entry.getKey()));
+                }
             }
+            return adoption;
+        } catch (ValidationException e){
+            throw new RuntimeException(e.getMessage());
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
         }
-        return adoption;
     }
 }
