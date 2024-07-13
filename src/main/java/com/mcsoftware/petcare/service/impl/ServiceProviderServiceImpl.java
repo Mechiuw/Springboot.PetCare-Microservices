@@ -1,6 +1,6 @@
 package com.mcsoftware.petcare.service.impl;
 
-import com.mcsoftware.petcare.model.converter.BuilderConverter;
+import com.mcsoftware.petcare.utils.converter.BuilderConverter;
 import com.mcsoftware.petcare.model.dto.request.ServiceProviderRequest;
 import com.mcsoftware.petcare.model.dto.response.ServiceProviderResponse;
 import com.mcsoftware.petcare.model.entity.Pet;

@@ -1,7 +1,7 @@
 package com.mcsoftware.petcare.service.impl;
 
 import com.mcsoftware.petcare.constant.EPetBehavior;
-import com.mcsoftware.petcare.model.converter.BuilderConverter;
+import com.mcsoftware.petcare.utils.converter.BuilderConverter;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
 import com.mcsoftware.petcare.model.entity.Pet;

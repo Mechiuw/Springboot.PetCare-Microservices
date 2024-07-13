@@ -1,5 +1,5 @@
 package com.mcsoftware.petcare.service.impl;
-import com.mcsoftware.petcare.model.converter.BuilderConverter;
+import com.mcsoftware.petcare.utils.converter.BuilderConverter;
 import com.mcsoftware.petcare.model.dto.request.VaccinatePointRequest;
 import com.mcsoftware.petcare.model.dto.response.RegulationsResponse;
 import com.mcsoftware.petcare.model.dto.response.VaccinatePointResponse;
@@ -164,7 +164,12 @@ public class VaccinationPointServiceImpl implements VaccinationPointService {
             Optional<VaccinatePoint> vaccinatePoint = vaccinationPointRepository.findById(id);
             if(vaccinatePoint.isPresent()) {
                 return RegulationsResponse.builder()
-                        .regulations(vaccinatePoint.get().animalControl(
+                        .wildAnimalId(vaccinatePoint.get().getWildAnimalId().getId())
+                        .locationFound(vaccinatePoint.get().getWildAnimalId().getLocationFound())
+                        .medicalConditions(vaccinatePoint.get().getWildAnimalId().getMedicalConditions())
+                        .vaccinatePointId(vaccinatePoint.get().getId())
+                        .regulations(
+                                vaccinatePoint.get().animalControl(
                                 vaccinatePoint.get().getWildAnimalId().getBreed(),
                                 vaccinatePoint.get().getServiceProviderId().getFirstName(),
                                 "CONFIRMED"))

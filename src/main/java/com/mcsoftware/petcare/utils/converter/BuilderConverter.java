@@ -1,4 +1,4 @@
-package com.mcsoftware.petcare.model.converter;
+package com.mcsoftware.petcare.utils.converter;
 
 import com.mcsoftware.petcare.model.dto.request.*;
 import com.mcsoftware.petcare.model.dto.response.*;

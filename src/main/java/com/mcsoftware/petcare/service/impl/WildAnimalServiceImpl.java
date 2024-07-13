@@ -1,8 +1,7 @@
 package com.mcsoftware.petcare.service.impl;
 
-import com.mcsoftware.petcare.model.converter.BuilderConverter;
+import com.mcsoftware.petcare.utils.converter.BuilderConverter;
 import com.mcsoftware.petcare.model.dto.request.WildAnimalRequest;
-import com.mcsoftware.petcare.model.dto.response.RegulationsResponse;
 import com.mcsoftware.petcare.model.dto.response.WildAnimalResponse;
 import com.mcsoftware.petcare.model.entity.WildAnimal;
 import com.mcsoftware.petcare.repository.WildAnimalRepository;
