@@ -1,6 +1,7 @@
 package com.mcsoftware.petcare.utils.converter;
 
 import com.mcsoftware.petcare.model.dto.request.AdoptionRequest;
+import com.mcsoftware.petcare.model.dto.response.AdoptionResponse;
 import com.mcsoftware.petcare.model.entity.Adoption;
 import com.mcsoftware.petcare.model.entity.Client;
 import com.mcsoftware.petcare.model.entity.Shelter;
@@ -27,6 +28,19 @@ public class TransactionBuilderConverter {
                     .clientId(client)
                     .shelterId(shelter)
                     .adoptionDetailList(adoptionRequest.getAdoptionDetailList())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public AdoptionResponse adoptionToAdoptionResponse(Adoption adoption){
+        try{
+            return AdoptionResponse.builder()
+                    .id(adoption.getId())
+                    .clientId(adoption.getClientId().getId())
+                    .shelterId(adoption.getShelterId().getId())
+                    .adoptionDetailList(adoption.getAdoptionDetailList())
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());
