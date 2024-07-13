@@ -1,8 +1,9 @@
 package com.mcsoftware.petcare.service.impl;
 
+import com.mcsoftware.petcare.constant.EStatus;
 import com.mcsoftware.petcare.model.dto.request.AdoptionRequest;
 import com.mcsoftware.petcare.model.dto.response.AdoptionResponse;
-import com.mcsoftware.petcare.model.entity.Adoption;
+import com.mcsoftware.petcare.model.entity.*;
 import com.mcsoftware.petcare.repository.AdoptionRepository;
 import com.mcsoftware.petcare.service.interfaces.AdoptionService;
 import com.mcsoftware.petcare.utils.converter.TransactionBuilderConverter;
@@ -14,6 +15,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -47,7 +49,9 @@ public class AdoptionServiceImpl implements AdoptionService {
             findAdoption.setClientId(finder.clientFinder(adoptionRequest.getClientId()));
             findAdoption.setShelterId(finder.shelterFinder(adoptionRequest.getShelterId()));
             findAdoption.setAdoptionDetailList(finder.adoptionDetailFinder(id));
-            return null;
+            Adoption validatedAdoption = validator.adoptionValidator(findAdoption);
+            Adoption savedAdoption = adoptionRepository.saveAndFlush(validatedAdoption);
+            return converter.adoptionToAdoptionResponse(savedAdoption);
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
         } catch (EntityNotFoundException e){
@@ -59,16 +63,45 @@ public class AdoptionServiceImpl implements AdoptionService {
 
     @Override
     public AdoptionResponse softDelete(String id) {
-        return null;
+        try{
+            Adoption findAdoption = finder.adoptionFinder(id);
+            findAdoption.setClientId(new Client("DEL","DEL","DEL","DEL","DEL","DEL","DEL", EStatus.INACTIVE, Collections.emptyList()));
+            findAdoption.setShelterId(new Shelter("DEL","DEL","DEL","DEL","DEL","DEL","DEL","DEL",EStatus.INACTIVE,Collections.emptyList(),Collections.emptyList()));
+            findAdoption.setAdoptionDetailList(Collections.emptyList());
+            Adoption softDeletedAdoption = adoptionRepository.saveAndFlush(findAdoption);
+            return converter.adoptionToAdoptionResponse(softDeletedAdoption);
+        } catch (ValidationException e){
+            throw new RuntimeException("Validation error: " + e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found error: " + e.getMessage());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to execute: " + e.getMessage());
+        }
     }
 
     @Override
     public AdoptionResponse getById(String id) {
-        return null;
+        try{
+            return null;
+        } catch (ValidationException e){
+            throw new RuntimeException("Validation error: " + e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found error: " + e.getMessage());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to execute: " + e.getMessage());
+        }
     }
 
     @Override
     public List<Adoption> getAll() {
-        return null;
+        try{
+            return null;
+        } catch (ValidationException e){
+            throw new RuntimeException("Validation error: " + e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new RuntimeException("Entity not found error: " + e.getMessage());
+        } catch (Exception e){
+            throw new RuntimeException("Failed to execute: " + e.getMessage());
+        }
     }
 }
