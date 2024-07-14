@@ -4,6 +4,7 @@ import com.mcsoftware.petcare.model.dto.API.CommonResponse;
 import com.mcsoftware.petcare.model.dto.request.ClientRequest;
 import com.mcsoftware.petcare.model.dto.response.ClientResponse;
 import com.mcsoftware.petcare.model.entity.Client;
+import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.service.interfaces.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -66,6 +67,19 @@ public class ClientController {
                         HttpStatus.OK.value(),
                         "successfully fetch clients",
                         clients
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(Endpoint.ALL_ADOPT_ID)
+    public ResponseEntity<?> getAllListAdopting(@PathVariable String id){
+        List<Pet> pets = clientService.getAllListAdopting(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully fetch pets",
+                        pets
                 ),
                 HttpStatus.OK
         );
