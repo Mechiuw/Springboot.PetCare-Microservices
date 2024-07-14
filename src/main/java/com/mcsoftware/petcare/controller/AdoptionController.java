@@ -8,10 +8,7 @@ import com.mcsoftware.petcare.service.interfaces.AdoptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(Endpoint.ADOPTION)
@@ -26,6 +23,32 @@ public class AdoptionController {
                         HttpStatus.CREATED.value(),
                         "successfully created adoption",
                         createResponse
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping(Endpoint.PUT_ID)
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody AdoptionRequest adoptionRequest){
+        AdoptionResponse updateResponse = adoptionService.update(id,adoptionRequest);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully updated adoption",
+                        updateResponse
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping(Endpoint.SOFT_DEL_ID)
+    public ResponseEntity<?> delete(@PathVariable String id){
+        AdoptionResponse response = adoptionService.softDelete(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully soft delete adoption",
+                        response
                 ),
                 HttpStatus.OK
         );

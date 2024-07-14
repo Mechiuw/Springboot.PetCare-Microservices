@@ -1,9 +1,7 @@
 package com.mcsoftware.petcare.utils.validator;
 
-import com.mcsoftware.petcare.model.entity.Adoption;
 import jakarta.validation.ValidationException;
 import org.hibernate.PropertyNotFoundException;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
