@@ -9,7 +9,6 @@ import com.mcsoftware.petcare.model.entity.ServiceProvider;
 import com.mcsoftware.petcare.model.entity.VaccinatePoint;
 import com.mcsoftware.petcare.service.interfaces.ServiceProviderService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.bytecode.enhance.spi.interceptor.AbstractLazyLoadInterceptor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +48,7 @@ public class ServiceProviderController {
     }
 
     @DeleteMapping(Endpoint.DELETE_ID)
-    public ResponseEntity<?> delete(String id){
+    public ResponseEntity<?> delete(@PathVariable String id){
         service.delete(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
@@ -62,7 +61,7 @@ public class ServiceProviderController {
     }
 
     @GetMapping(Endpoint.GET_ID)
-    public ResponseEntity<?> getById(String id){
+    public ResponseEntity<?> getById(@PathVariable String id){
         ServiceProviderResponse response = service.getById(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
@@ -88,7 +87,7 @@ public class ServiceProviderController {
     }
 
     @GetMapping(Endpoint.ALL_ASSIGNED)
-    public ResponseEntity<?> getAllAssignedAnimals(String id){
+    public ResponseEntity<?> getAllAssignedAnimals(@PathVariable String id){
         List<Pet> response = service.getAllAssignedAnimals(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
@@ -101,7 +100,7 @@ public class ServiceProviderController {
     }
 
     @GetMapping(Endpoint.ALL_VP)
-    public ResponseEntity<?> getAllVaccinatePoints(String id){
+    public ResponseEntity<?> getAllVaccinatePoints(@PathVariable String id){
         List<VaccinatePoint> response = service.getAllVaccinatePoints(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
@@ -114,8 +113,8 @@ public class ServiceProviderController {
     }
 
     @GetMapping(Endpoint.EVAX_ID)
-    public ResponseEntity<?> eVaxDose(){
-
+    public ResponseEntity<?> eVaxDose(@PathVariable String id){
+        ServiceProviderResponse response = service.eVaxDose(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
                         HttpStatus.OK.value(),
