@@ -4,12 +4,15 @@ import com.mcsoftware.petcare.app.Endpoint;
 import com.mcsoftware.petcare.model.dto.API.CommonResponse;
 import com.mcsoftware.petcare.model.dto.request.ShelterRequest;
 import com.mcsoftware.petcare.model.dto.response.ShelterResponse;
+import com.mcsoftware.petcare.model.entity.Shelter;
 import com.mcsoftware.petcare.service.interfaces.ShelterService;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(Endpoint.SHELTER)
@@ -68,7 +71,19 @@ public class ShelterController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> getAll(){}
+
+    @GetMapping
+    public ResponseEntity<?> getAll(){
+        List<Shelter> response = service.getAll();
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully created shelter",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
     public ResponseEntity<?> getAllPetinShelter(String id){}
     public ResponseEntity<?> getVaccinatePointList(String id){}
 }
