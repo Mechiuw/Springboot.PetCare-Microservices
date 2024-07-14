@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(Endpoint.SHELTER)
@@ -32,7 +29,19 @@ public class ShelterController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> update(String id,ShelterRequest shelterRequest){}
+
+    @PutMapping(Endpoint.PUT_ID)
+    public ResponseEntity<?> update(@PathVariable String id,@RequestBody ShelterRequest shelterRequest){
+        ShelterResponse response = service.update(id,shelterRequest);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully created shelter",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
     public ResponseEntity<?> delete(String id){}
     public ResponseEntity<?> getById(String id){}
     public ResponseEntity<?> getAll(){}
