@@ -24,4 +24,4 @@ http://localhost:8080/api/client
 </code></pre>
 
 <p>we will keep on improving our code for more updates to help the application performs a lot better</p>
-<h3>~ API Will be Documented Directly ~</h3>
+<h3>~ API Will be Documented Independently ~</h3>
