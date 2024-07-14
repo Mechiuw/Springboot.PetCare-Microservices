@@ -46,15 +46,15 @@ public class AdoptionDetailServiceImpl implements AdoptionDetailService {
     @Override
     public AdoptionDetailResponse update(String id, AdoptionDetailRequest adoptionDetailRequest) {
         try {
-            Pet foundPet = finder.;
+            Pet foundPet = finder.petFinder(adoptionDetailRequest.getPetId());
+            String foundMessage = adoptionDetailRequest.getMessage();
+            Adoption foundAdoption = finder.adoptionFinder(adoptionDetailRequest.getAdoptionId());
             AdoptionDetail foundAd = finder.adoptionDetailFinder(id);
-            foundAd.setPetId(adoptionDetailRequest.getPetId());
-            foundAd.
-            foundAd.
-            foundAd.
-            foundAd.
-            foundAd.
-            return null;
+            foundAd.setPetId(foundPet);
+            foundAd.setMessage(foundMessage);
+            foundAd.setAdoptionId(foundAdoption);
+            AdoptionDetail savedAd = adoptionDetailRepository.saveAndFlush(foundAd);
+            return converter.adoptionDetailToAdoptionDetailResponse(savedAd);
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
         } catch (EntityNotFoundException e){
