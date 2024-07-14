@@ -16,7 +16,9 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.channels.NoConnectionPendingException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +69,12 @@ public class AdoptionDetailServiceImpl implements AdoptionDetailService {
     @Override
     public void delete(String id) {
         try{
+            Optional<AdoptionDetail> foundAd = adoptionDetailRepository.findById(id);
+            if(foundAd.isPresent()) {
+                adoptionDetailRepository.delete(foundAd.get());
+            } else {
+                throw new EntityNotFoundException("not found any adoption detail with id : " + id);
+            }
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
         } catch (EntityNotFoundException e){
@@ -79,7 +87,8 @@ public class AdoptionDetailServiceImpl implements AdoptionDetailService {
     @Override
     public AdoptionDetailResponse getById(String id) {
         try{
-        return null;
+            return finder.adoptionDetailFinder(adoptionDetailRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("not found any adotion detail with id : " + id));
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
         } catch (EntityNotFoundException e){
