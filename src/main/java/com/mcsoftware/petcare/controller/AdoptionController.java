@@ -4,11 +4,14 @@ import com.mcsoftware.petcare.app.Endpoint;
 import com.mcsoftware.petcare.model.dto.API.CommonResponse;
 import com.mcsoftware.petcare.model.dto.request.AdoptionRequest;
 import com.mcsoftware.petcare.model.dto.response.AdoptionResponse;
+import com.mcsoftware.petcare.model.entity.Adoption;
 import com.mcsoftware.petcare.service.interfaces.AdoptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(Endpoint.ADOPTION)
@@ -42,13 +45,39 @@ public class AdoptionController {
     }
 
     @PutMapping(Endpoint.SOFT_DEL_ID)
-    public ResponseEntity<?> delete(@PathVariable String id){
+    public ResponseEntity<?> softDelete(@PathVariable String id){
         AdoptionResponse response = adoptionService.softDelete(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
                         HttpStatus.CREATED.value(),
                         "successfully soft delete adoption",
                         response
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping(Endpoint.GET_ID)
+    public ResponseEntity<?> getById(@PathVariable String id){
+        AdoptionResponse response = adoptionService.getById(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully fetch adoption",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAll(){
+        List<Adoption> adoptionList = adoptionService.getAll();
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully fetch adoptions",
+                        adoptionList
                 ),
                 HttpStatus.OK
         );
