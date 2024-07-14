@@ -87,7 +87,7 @@ public class ShelterController {
     }
 
     @GetMapping(Endpoint.PET_SHELTER_ID)
-    public ResponseEntity<?> getAllPetinShelter(String id){
+    public ResponseEntity<?> getAllPetinShelter(@PathVariable String id){
         List<Pet> response = service.getAllPetInShelter(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
@@ -98,7 +98,9 @@ public class ShelterController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> getVaccinatePointList(String id){
+
+    @GetMapping(Endpoint.VAX_SHELTER_ID)
+    public ResponseEntity<?> getVaccinatePointList(@PathVariable String id){
         List<VaccinatePoint> response = service.getVaccinatePointList(id);
         return new ResponseEntity<>(
                 new CommonResponse<>(
