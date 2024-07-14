@@ -42,7 +42,19 @@ public class ShelterController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> delete(String id){}
+
+    @DeleteMapping(Endpoint.DELETE_ID)
+    public ResponseEntity<?> delete(@PathVariable String id){
+        service.delete(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully created shelter",
+                        "deleted shelter with id : " + id
+                ),
+                HttpStatus.OK
+        );
+    }
     public ResponseEntity<?> getById(String id){}
     public ResponseEntity<?> getAll(){}
     public ResponseEntity<?> getAllPetinShelter(String id){}
