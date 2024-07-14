@@ -23,7 +23,6 @@ public class TransactionBuilderConverter {
     private final ClientRepository clientRepository;
     private final ShelterRepository shelterRepository;
     private final PetRepository petRepository;
-    private final AdoptionDetailRepository adoptionDetailRepository;
     private final AdoptionRepository adoptionRepository;
     public Adoption adoptionRequestToAdoption(AdoptionRequest adoptionRequest){
         try{
