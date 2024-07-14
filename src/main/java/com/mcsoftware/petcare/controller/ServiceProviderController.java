@@ -4,12 +4,17 @@ import com.mcsoftware.petcare.app.Endpoint;
 import com.mcsoftware.petcare.model.dto.API.CommonResponse;
 import com.mcsoftware.petcare.model.dto.request.ServiceProviderRequest;
 import com.mcsoftware.petcare.model.dto.response.ServiceProviderResponse;
+import com.mcsoftware.petcare.model.entity.Pet;
+import com.mcsoftware.petcare.model.entity.ServiceProvider;
+import com.mcsoftware.petcare.model.entity.VaccinatePoint;
 import com.mcsoftware.petcare.service.interfaces.ServiceProviderService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.bytecode.enhance.spi.interceptor.AbstractLazyLoadInterceptor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(Endpoint.SERVICE_PROVIDER)
@@ -70,14 +75,54 @@ public class ServiceProviderController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAll(){}
+    public ResponseEntity<?> getAll(){
+        List<ServiceProvider> response = service.getAll();
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated service provider",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 
     @GetMapping(Endpoint.ALL_ASSIGNED)
-    public ResponseEntity<?> getAllAssignedAnimals(){}
+    public ResponseEntity<?> getAllAssignedAnimals(String id){
+        List<Pet> response = service.getAllAssignedAnimals(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated service provider",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 
     @GetMapping(Endpoint.ALL_VP)
-    public ResponseEntity<?> getAllVaccinatePoints(){}
+    public ResponseEntity<?> getAllVaccinatePoints(String id){
+        List<VaccinatePoint> response = service.getAllVaccinatePoints(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated service provider",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 
     @GetMapping(Endpoint.EVAX_ID)
-    public ResponseEntity<?> eVaxDose(){}
+    public ResponseEntity<?> eVaxDose(){
+
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated service provider",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 }
