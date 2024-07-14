@@ -2,6 +2,7 @@ package com.mcsoftware.petcare.utils.converter;
 
 import com.mcsoftware.petcare.model.dto.request.AdoptionDetailRequest;
 import com.mcsoftware.petcare.model.dto.request.AdoptionRequest;
+import com.mcsoftware.petcare.model.dto.response.AdoptionDetailResponse;
 import com.mcsoftware.petcare.model.dto.response.AdoptionResponse;
 import com.mcsoftware.petcare.model.entity.Adoption;
 import com.mcsoftware.petcare.model.entity.AdoptionDetail;
@@ -63,6 +64,18 @@ public class TransactionBuilderConverter {
                                     + adoptionDetailRequest.getAdoptionId())))
                     .build();
         }catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public AdoptionDetailResponse adoptionDetailToAdoptionDetailResponse(AdoptionDetail adoptionDetail){
+        try{
+            return AdoptionDetailResponse.builder()
+                    .petId(adoptionDetail.getPetId().getId())
+                    .message(adoptionDetail.getMessage())
+                    .adoptionId(adoptionDetail.getAdoptionId().getId())
+                    .build();
+        } catch (Exception e){
             throw new RuntimeException(e.getCause());
         }
     }
