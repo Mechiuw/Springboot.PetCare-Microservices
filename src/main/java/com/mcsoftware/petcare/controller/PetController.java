@@ -108,5 +108,17 @@ public class PetController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> getPetMedicalConditions(){}
+
+    @GetMapping()
+    public ResponseEntity<?> getPetMedicalConditions(@PathVariable String id){
+        PetResponse response = petService.getPetMedicalConditions(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully get pet medical conditions",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 }

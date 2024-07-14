@@ -20,4 +20,5 @@ public class Endpoint {
 
     public static final String ALL_ADOPT_ID = "/all-adopt/{id}";
     public static final String SOFT_DEL_ID = "/soft-del/{id}";
+    public static final String MEDS_ID = "/medical-conditions/{id}";
 }
