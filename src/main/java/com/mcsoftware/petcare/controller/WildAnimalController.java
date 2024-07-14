@@ -3,16 +3,12 @@ package com.mcsoftware.petcare.controller;
 
 import com.mcsoftware.petcare.app.Endpoint;
 import com.mcsoftware.petcare.model.dto.API.CommonResponse;
-import com.mcsoftware.petcare.model.dto.request.VaccinatePointRequest;
 import com.mcsoftware.petcare.model.dto.request.WildAnimalRequest;
-import com.mcsoftware.petcare.model.dto.response.VaccinatePointResponse;
 import com.mcsoftware.petcare.model.dto.response.WildAnimalResponse;
-import com.mcsoftware.petcare.model.entity.VaccinatePoint;
 import com.mcsoftware.petcare.model.entity.WildAnimal;
 import com.mcsoftware.petcare.service.interfaces.WildAnimalService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -87,5 +83,16 @@ public class WildAnimalController {
         );
     }
 
-
+    @GetMapping(Endpoint.ANIMAL_VAX_ID)
+    public ResponseEntity<?> getWildAnimalVax(@PathVariable String id){
+        WildAnimalResponse response = service.getWildAnimalVax(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully fetch data",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 }

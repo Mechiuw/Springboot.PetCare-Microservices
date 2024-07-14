@@ -26,4 +26,5 @@ public class Endpoint {
     public static final String EVAX_ID = "/evax/{id}";
     public static final String PET_SHELTER_ID = "/pet-shelter/{id}";
     public static final String VAX_SHELTER_ID = "/vax-shelter/{id}";
+    public static final String ANIMAL_VAX_ID = "/animal-vax/{id}";
 }
