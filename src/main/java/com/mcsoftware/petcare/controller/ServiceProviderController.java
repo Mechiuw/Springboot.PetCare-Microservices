@@ -44,10 +44,30 @@ public class ServiceProviderController {
     }
 
     @DeleteMapping(Endpoint.DELETE_ID)
-    public ResponseEntity<?> delete(){}
+    public ResponseEntity<?> delete(String id){
+        service.delete(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated service provider",
+                        "deleted service provider : " + id
+                ),
+                HttpStatus.OK
+        );
+    }
 
     @GetMapping(Endpoint.GET_ID)
-    public ResponseEntity<?> getById(){}
+    public ResponseEntity<?> getById(String id){
+        ServiceProviderResponse response = service.getById(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated service provider",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll(){}
