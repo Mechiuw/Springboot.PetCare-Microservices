@@ -8,10 +8,7 @@ import com.mcsoftware.petcare.service.interfaces.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(Endpoint.PET)
@@ -31,7 +28,18 @@ public class PetController {
                 HttpStatus.CREATED
         );
     }
-    public ResponseEntity<?> update(){}
+    @PutMapping(Endpoint.PUT_ID)
+    public ResponseEntity<?> update(@PathVariable String id,@RequestBody PetRequest petRequest){
+        PetResponse response = petService.update(id,petRequest);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated pet",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
     public ResponseEntity<?> delete(){}
     public ResponseEntity<?> getById(){}
     public ResponseEntity<?> getAll(){}
