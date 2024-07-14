@@ -4,11 +4,14 @@ import com.mcsoftware.petcare.app.Endpoint;
 import com.mcsoftware.petcare.model.dto.API.CommonResponse;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
+import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.service.interfaces.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(Endpoint.PET)
@@ -53,8 +56,34 @@ public class PetController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> getById(){}
-    public ResponseEntity<?> getAll(){}
+
+    @GetMapping(Endpoint.GET_ID)
+    public ResponseEntity<?> getById(@PathVariable String id){
+        PetResponse response = petService.getById(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully fetch pet",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAll(){
+        List<Pet> pets = petService.getAll();
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully fetch all pets",
+                        pets
+                ),
+                HttpStatus.OK
+        );
+    }
+
+
     public ResponseEntity<?> petBoarding(){}
     public ResponseEntity<?> getPetMedicalConditions(){}
 }
