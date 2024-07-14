@@ -1,19 +1,11 @@
 package com.mcsoftware.petcare.utils.finder;
 
-import com.mcsoftware.petcare.model.entity.Adoption;
-import com.mcsoftware.petcare.model.entity.AdoptionDetail;
-import com.mcsoftware.petcare.model.entity.Client;
-import com.mcsoftware.petcare.model.entity.Shelter;
-import com.mcsoftware.petcare.repository.AdoptionDetailRepository;
-import com.mcsoftware.petcare.repository.AdoptionRepository;
-import com.mcsoftware.petcare.repository.ClientRepository;
-import com.mcsoftware.petcare.repository.ShelterRepository;
+import com.mcsoftware.petcare.model.entity.*;
+import com.mcsoftware.petcare.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +17,16 @@ public class TransactionFinder {
     private final ClientRepository clientRepository;
     private final ShelterRepository shelterRepository;
     private final AdoptionDetailRepository adoptionDetailRepository;
+    private  final PetRepository petRepository;
 
+    public Pet petFinder(String id){
+        try{
+            return petRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("not found any pet with id : " + id));
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
     public Adoption adoptionFinder(String id){
         try{
             return adoptionRepository.findById(id)
@@ -53,7 +54,7 @@ public class TransactionFinder {
         }
     }
 
-    public List<AdoptionDetail> adoptionDetailFinder(String id){
+    public List<AdoptionDetail> adoptionDetailListFinder(String id){
         try{
             Optional<Adoption> adoption = adoptionRepository.findById(id);
             if(adoption.isPresent() && !adoption.get().getAdoptionDetailList().isEmpty()){
@@ -62,6 +63,19 @@ public class TransactionFinder {
                 return Collections.emptyList();
             } else {
                 throw new EntityNotFoundException("adoption not found with id : " + id);
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    public AdoptionDetail adoptionDetailFinder(String id){
+        try{
+            Optional<AdoptionDetail> foundAd = adoptionDetailRepository.findById(id);
+            if(foundAd.isPresent()){
+                return foundAd.get();
+            } else {
+                throw new EntityNotFoundException("adoption detail not found with id : " + id);
             }
         } catch (Exception e){
             throw new RuntimeException(e.getCause());

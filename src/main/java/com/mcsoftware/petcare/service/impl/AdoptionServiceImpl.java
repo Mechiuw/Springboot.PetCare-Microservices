@@ -48,7 +48,7 @@ public class AdoptionServiceImpl implements AdoptionService {
             Adoption findAdoption = finder.adoptionFinder(id);
             findAdoption.setClientId(finder.clientFinder(adoptionRequest.getClientId()));
             findAdoption.setShelterId(finder.shelterFinder(adoptionRequest.getShelterId()));
-            findAdoption.setAdoptionDetailList(finder.adoptionDetailFinder(id));
+            findAdoption.setAdoptionDetailList(finder.adoptionDetailListFinder(id));
             Adoption validatedAdoption = validator.validator(findAdoption);
             Adoption savedAdoption = adoptionRepository.saveAndFlush(validatedAdoption);
             return converter.adoptionToAdoptionResponse(savedAdoption);

@@ -2,7 +2,9 @@ package com.mcsoftware.petcare.service.impl;
 
 import com.mcsoftware.petcare.model.dto.request.AdoptionDetailRequest;
 import com.mcsoftware.petcare.model.dto.response.AdoptionDetailResponse;
+import com.mcsoftware.petcare.model.entity.Adoption;
 import com.mcsoftware.petcare.model.entity.AdoptionDetail;
+import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.repository.AdoptionDetailRepository;
 import com.mcsoftware.petcare.service.interfaces.AdoptionDetailService;
 import com.mcsoftware.petcare.utils.converter.TransactionBuilderConverter;
@@ -44,6 +46,14 @@ public class AdoptionDetailServiceImpl implements AdoptionDetailService {
     @Override
     public AdoptionDetailResponse update(String id, AdoptionDetailRequest adoptionDetailRequest) {
         try {
+            Pet foundPet = finder.;
+            AdoptionDetail foundAd = finder.adoptionDetailFinder(id);
+            foundAd.setPetId(adoptionDetailRequest.getPetId());
+            foundAd.
+            foundAd.
+            foundAd.
+            foundAd.
+            foundAd.
             return null;
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
@@ -57,7 +67,6 @@ public class AdoptionDetailServiceImpl implements AdoptionDetailService {
     @Override
     public void delete(String id) {
         try{
-
         } catch (ValidationException e){
             throw new RuntimeException("Validation error: " + e.getMessage());
         } catch (EntityNotFoundException e){
