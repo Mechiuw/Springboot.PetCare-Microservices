@@ -29,7 +29,7 @@ public class VaccinationPointController {
                         "successfully created data",
                         response
                 ),
-                HttpStatus.OK
+                HttpStatus.CREATED
         );
     }
 
