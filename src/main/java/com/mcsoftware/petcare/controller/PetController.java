@@ -109,7 +109,7 @@ public class PetController {
         );
     }
 
-    @GetMapping()
+    @GetMapping(Endpoint.MEDS_ID)
     public ResponseEntity<?> getPetMedicalConditions(@PathVariable String id){
         PetResponse response = petService.getPetMedicalConditions(id);
         return new ResponseEntity<>(
