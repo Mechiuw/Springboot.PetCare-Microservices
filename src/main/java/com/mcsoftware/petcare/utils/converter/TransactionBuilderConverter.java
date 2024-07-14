@@ -13,6 +13,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -29,10 +31,32 @@ public class TransactionBuilderConverter {
                     .orElseThrow(() -> new EntityNotFoundException("not found any client"));
             Shelter shelter = shelterRepository.findById(adoptionRequest.getShelterId())
                     .orElseThrow(() -> new EntityNotFoundException("not found any shelter"));
+            List<AdoptionDetail> adoptionDetails = new ArrayList<>();
+            Adoption adoption = Adoption.builder().build();
+            adoption.setClientId(client);
+            adoption.setShelterId(shelter);
+
+            for(AdoptionDetail x : adoptionRequest.getAdoptionDetailList()){
+                AdoptionDetail detail = AdoptionDetail.builder()
+                        .petId(x.getPetId())
+                        .message(x.getMessage())
+                        .adoptionId(adoption)
+                        .build();
+                adoptionDetails.add(detail);
+            }
+            adoption.setAdoptionDetailList(adoptionDetails);
+            Adoption savedAdoption = adoptionRepository.save(adoption);
+            List<AdoptionDetail> adoptionDetailList = adoptionDetails.stream()
+                    .map((x) -> AdoptionDetail.builder()
+                            .petId(x.getPetId())
+                            .message(x.getMessage())
+                            .adoptionId(x.getAdoptionId())
+                            .build()
+                    ).toList();
             return Adoption.builder()
-                    .clientId(client)
-                    .shelterId(shelter)
-                    .adoptionDetailList(adoptionRequest.getAdoptionDetailList())
+                    .clientId(savedAdoption.getClientId())
+                    .shelterId(savedAdoption.getShelterId())
+                    .adoptionDetailList(adoptionDetailList)
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e.getCause());
