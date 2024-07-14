@@ -55,7 +55,19 @@ public class ShelterController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> getById(String id){}
+
+    @GetMapping(Endpoint.GET_ID)
+    public ResponseEntity<?> getById(@PathVariable String id){
+        ShelterResponse response = service.getById(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully created shelter",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
     public ResponseEntity<?> getAll(){}
     public ResponseEntity<?> getAllPetinShelter(String id){}
     public ResponseEntity<?> getVaccinatePointList(String id){}
