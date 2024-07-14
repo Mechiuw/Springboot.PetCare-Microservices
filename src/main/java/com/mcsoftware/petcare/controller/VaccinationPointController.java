@@ -85,7 +85,7 @@ public class VaccinationPointController {
         );
     }
 
-    @GetMapping
+    @GetMapping(Endpoint.REGULATIONS)
     public ResponseEntity<?> regulations(@PathVariable String id){
         RegulationsResponse response = service.regulations(id);
         return new ResponseEntity<>(
