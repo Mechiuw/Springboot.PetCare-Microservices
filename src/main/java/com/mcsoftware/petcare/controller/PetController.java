@@ -5,6 +5,7 @@ import com.mcsoftware.petcare.model.dto.API.CommonResponse;
 import com.mcsoftware.petcare.model.dto.request.PetRequest;
 import com.mcsoftware.petcare.model.dto.response.PetResponse;
 import com.mcsoftware.petcare.model.entity.Pet;
+import com.mcsoftware.petcare.model.entity.WildAnimal;
 import com.mcsoftware.petcare.service.interfaces.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -83,7 +84,29 @@ public class PetController {
         );
     }
 
+    @PostMapping(Endpoint.BOARDING_PET)
+    public ResponseEntity<?> petBoarding(
+            @RequestParam WildAnimal wildAnimal,
+            @RequestParam String name,
+            @RequestParam String age,
+            @RequestParam String shelterAdoptId,
+            @RequestParam String serviceProviderId){
+        PetResponse board = petService.petBoarding(
+                wildAnimal,
+                name,
+                age,
+                shelterAdoptId,
+                serviceProviderId
+        );
 
-    public ResponseEntity<?> petBoarding(){}
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully boarded a pet",
+                        board
+                ),
+                HttpStatus.OK
+        );
+    }
     public ResponseEntity<?> getPetMedicalConditions(){}
 }

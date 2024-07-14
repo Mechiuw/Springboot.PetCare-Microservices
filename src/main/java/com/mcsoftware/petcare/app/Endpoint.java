@@ -12,6 +12,7 @@ public class Endpoint {
     public static final String ADOPTION = API + "/adoption";
     public static final String ADOPTION_DETAIL = API + "/adoption-detail";
     public static final String REGULATIONS = API + "/regulations";
+    public static final String BOARDING_PET = "/boarding-pet";
 
     public static final String PUT_ID = "/{id}";
     public static final String DELETE_ID = "/{id}";
