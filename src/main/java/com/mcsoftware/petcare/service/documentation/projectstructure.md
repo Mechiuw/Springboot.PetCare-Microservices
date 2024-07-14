@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Project Structure</title>
 </head>
 <body>
     <h1>Project Structure </h1>
