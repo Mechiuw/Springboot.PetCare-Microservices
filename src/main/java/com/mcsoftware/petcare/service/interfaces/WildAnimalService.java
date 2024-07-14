@@ -14,6 +14,8 @@ public interface WildAnimalService {
     WildAnimalResponse getById(String id);
     List<WildAnimal> getAll();
     WildAnimalResponse getWildAnimalVax(String id);
+
+    //FINDER, VALIDATOR
     WildAnimal wildAnimalFinder(String id);
     WildAnimal wildAnimalValidator(WildAnimal wildAnimal);
 }

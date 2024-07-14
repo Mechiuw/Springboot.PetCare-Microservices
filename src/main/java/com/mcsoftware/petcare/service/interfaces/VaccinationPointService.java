@@ -7,12 +7,17 @@ import java.util.List;
 
 public interface VaccinationPointService {
 
+    //CRUD
     VaccinatePointResponse create(VaccinatePointRequest vaccinatePointRequest);
     VaccinatePointResponse update(String id,VaccinatePointRequest vaccinatePointRequest);
     void delete(String id);
     VaccinatePointResponse getById(String id);
     List<VaccinatePoint> getAll();
+
+    //REGULATIONS
+    RegulationsResponse regulations(String id);
+
+    //FINDER, VALIDATOR
     VaccinatePoint vpFinder(String id);
     VaccinatePoint vpValidator(VaccinatePoint vaccinatePoint);
-    RegulationsResponse regulations(String id);
 }
