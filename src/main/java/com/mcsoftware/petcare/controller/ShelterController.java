@@ -4,10 +4,11 @@ import com.mcsoftware.petcare.app.Endpoint;
 import com.mcsoftware.petcare.model.dto.API.CommonResponse;
 import com.mcsoftware.petcare.model.dto.request.ShelterRequest;
 import com.mcsoftware.petcare.model.dto.response.ShelterResponse;
+import com.mcsoftware.petcare.model.entity.Pet;
 import com.mcsoftware.petcare.model.entity.Shelter;
+import com.mcsoftware.petcare.model.entity.VaccinatePoint;
 import com.mcsoftware.petcare.service.interfaces.ShelterService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class ShelterController {
         return new ResponseEntity<>(
                 new CommonResponse<>(
                         HttpStatus.CREATED.value(),
-                        "successfully created shelter",
+                        "successfully updated shelter",
                         response
                 ),
                 HttpStatus.OK
@@ -52,7 +53,7 @@ public class ShelterController {
         return new ResponseEntity<>(
                 new CommonResponse<>(
                         HttpStatus.CREATED.value(),
-                        "successfully created shelter",
+                        "successfully delete shelter",
                         "deleted shelter with id : " + id
                 ),
                 HttpStatus.OK
@@ -65,7 +66,7 @@ public class ShelterController {
         return new ResponseEntity<>(
                 new CommonResponse<>(
                         HttpStatus.CREATED.value(),
-                        "successfully created shelter",
+                        "successfully fetch shelter",
                         response
                 ),
                 HttpStatus.OK
@@ -78,12 +79,34 @@ public class ShelterController {
         return new ResponseEntity<>(
                 new CommonResponse<>(
                         HttpStatus.CREATED.value(),
-                        "successfully created shelter",
+                        "successfully fetch all shelter",
                         response
                 ),
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> getAllPetinShelter(String id){}
-    public ResponseEntity<?> getVaccinatePointList(String id){}
+
+    @GetMapping(Endpoint.PET_SHELTER_ID)
+    public ResponseEntity<?> getAllPetinShelter(String id){
+        List<Pet> response = service.getAllPetInShelter(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully fetch all pet",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
+    public ResponseEntity<?> getVaccinatePointList(String id){
+        List<VaccinatePoint> response = service.getVaccinatePointList(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.CREATED.value(),
+                        "successfully fetch all vaccination",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 }
