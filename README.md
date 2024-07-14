@@ -5,6 +5,7 @@ https://github.com/Mechiuw/Springboot.PetCare-Business-Service/blob/development/
 <h1>CONTROLLER DOCS</h1>
 https://github.com/Mechiuw/Springboot.PetCare-Business-Service/blob/development/src/main/java/com/mcsoftware/petcare/service/documentation/controllerdocs.md
 <h1>API DOCS</h1>
+https://github.com/Mechiuw/Springboot.PetCare-Business-Service/blob/development/src/main/java/com/mcsoftware/petcare/service/documentation/apidocs.md
 
 <div >
 <h1>That's All!</h1>
