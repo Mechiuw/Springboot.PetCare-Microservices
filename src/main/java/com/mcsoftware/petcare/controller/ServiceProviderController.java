@@ -31,7 +31,17 @@ public class ServiceProviderController {
     }
 
     @PutMapping(Endpoint.PUT_ID)
-    public ResponseEntity<?> update(){}
+    public ResponseEntity<?> update(@PathVariable String id,@RequestBody ServiceProviderRequest serviceProviderRequest){
+        ServiceProviderResponse response = service.update(id,serviceProviderRequest);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully updated service provider",
+                        response
+                ),
+                HttpStatus.OK
+        );
+    }
 
     @DeleteMapping(Endpoint.DELETE_ID)
     public ResponseEntity<?> delete(){}
