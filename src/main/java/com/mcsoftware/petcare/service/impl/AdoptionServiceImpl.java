@@ -30,7 +30,7 @@ public class AdoptionServiceImpl implements AdoptionService {
     public AdoptionResponse create(AdoptionRequest adoptionRequest) throws IllegalAccessException {
         try {
             Adoption newAdoption = converter.adoptionRequestToAdoption(adoptionRequest);
-            Adoption validatedAdoption = validator.adoptionValidator(newAdoption);
+            Adoption validatedAdoption = validator.validator(newAdoption);
             Adoption savedAdoption = adoptionRepository.save(validatedAdoption);
             return converter.adoptionToAdoptionResponse(savedAdoption);
         } catch (ValidationException e){
@@ -49,7 +49,7 @@ public class AdoptionServiceImpl implements AdoptionService {
             findAdoption.setClientId(finder.clientFinder(adoptionRequest.getClientId()));
             findAdoption.setShelterId(finder.shelterFinder(adoptionRequest.getShelterId()));
             findAdoption.setAdoptionDetailList(finder.adoptionDetailFinder(id));
-            Adoption validatedAdoption = validator.adoptionValidator(findAdoption);
+            Adoption validatedAdoption = validator.validator(findAdoption);
             Adoption savedAdoption = adoptionRepository.saveAndFlush(validatedAdoption);
             return converter.adoptionToAdoptionResponse(savedAdoption);
         } catch (ValidationException e){

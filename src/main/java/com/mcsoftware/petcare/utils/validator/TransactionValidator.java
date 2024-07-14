@@ -13,8 +13,8 @@ import java.util.Map;
 @Component
 public class TransactionValidator {
 
-    @Bean
-    public Map<String,Object> objToMap(Object obj) throws IllegalAccessException {
+
+    public <T> Map<String,Object> objToMap(T obj) throws IllegalAccessException {
         try {
             Map<String, Object> mapped = new HashMap<>();
             Field[] fields = obj.getClass().getDeclaredFields();
@@ -31,16 +31,16 @@ public class TransactionValidator {
         }
     }
 
-    @Bean
-    public Adoption adoptionValidator(Adoption adoption) throws IllegalAccessException {
+
+    public <T> T validator(T obj) throws IllegalAccessException {
         try {
-            Map<String, Object> mapped = objToMap(adoption);
+            Map<String, Object> mapped = objToMap(obj);
             for (Map.Entry<String, Object> entry : mapped.entrySet()) {
                 if (entry.getValue() == null) {
                     throw new PropertyNotFoundException(String.format("%s can't be null", entry.getKey()));
                 }
             }
-            return adoption;
+            return obj;
         } catch (ValidationException e){
             throw new RuntimeException(e.getMessage());
         } catch (Exception e){

@@ -24,8 +24,9 @@ public class AdoptionDetailServiceImpl implements AdoptionDetailService {
     private final TransactionValidator validator;
 
     @Override
-    public AdoptionDetailResponse create(AdoptionDetailRequest adoptionDetailRequest) {
-        AdoptionDetail detail = converter.
+    public AdoptionDetailResponse create(AdoptionDetailRequest adoptionDetailRequest) throws IllegalAccessException {
+        AdoptionDetail detail = converter.adoptionDetailRequestToAdoptionDetail(adoptionDetailRequest);
+        AdoptionDetail validatedAD = validator.validator(detail);
         return null;
     }
 
