@@ -40,7 +40,19 @@ public class PetController {
                 HttpStatus.OK
         );
     }
-    public ResponseEntity<?> delete(){}
+
+    @DeleteMapping(Endpoint.DELETE_ID)
+    public ResponseEntity<?> delete(@PathVariable String id){
+        petService.delete(id);
+        return new ResponseEntity<>(
+                new CommonResponse<>(
+                        HttpStatus.OK.value(),
+                        "successfully deleted pet",
+                        "deleted pet with id : " + id
+                ),
+                HttpStatus.OK
+        );
+    }
     public ResponseEntity<?> getById(){}
     public ResponseEntity<?> getAll(){}
     public ResponseEntity<?> petBoarding(){}
